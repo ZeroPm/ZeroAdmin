@@ -1,0 +1,38 @@
+
+.grid-basis{
+	padding: 10px;
+    line-height: 50px;
+    color: #666;
+}
+
+.an-total{
+	font-size: 14px;
+	margin-left: 10px;
+	color: #666;
+}
+
+.grid-content{
+	padding:10px;
+}
+
+.content{
+	border: 1px solid  #e6e6e6;
+	margin-bottom: 10px;
+}
+
+.info-content{
+	margin: 10px;
+}
+
+.add-info{
+	border: 1px solid  #e6e6e6;
+	line-height:444px;
+	color: #666;
+	text-align:center;
+	cursor:pointer
+}
+.add-info:hover{
+	border: 1px solid  #009688;
+	color: #009688;
+}
+

@@ -1,0 +1,50 @@
+Message-ID: <7fa87701c0ab72c17bf5912f1b1a87ff@localhost>
+Date: Sat, 02 Mar 2019 20:17:06 +0800
+Subject: Password reset for =?utf-8?Q?alili=E5=90=8E=E5=8F=B0=E7=AE=A1?=
+ =?utf-8?Q?=E7=90=86=E7=B3=BB=E7=BB=9F?=
+From: =?utf-8?Q?alili=E5=90=8E=E5=8F=B0=E7=AE=A1?=
+ =?utf-8?Q?=E7=90=86=E7=B3=BB=E7=BB=9F?= robot <ccdatesite@126.com>
+To: 498159720@qq.com
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="_=_swift_v4_1551529026_7adc55cbecfba8724469541ef544523f_=_"
+
+
+--_=_swift_v4_1551529026_7adc55cbecfba8724469541ef544523f_=_
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Hello admin,
+
+Follow the link below to reset your password:
+
+http://localhost:8081/rbac/user/reset-password?token=3DDHflDY3aaoq5a5CbamIE=
+emc6hnuKiJ4P_1551528927
+
+--_=_swift_v4_1551529026_7adc55cbecfba8724469541ef544523f_=_
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org=
+/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns=3D"http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3DUTF-8=
+" />
+    <title></title>
+    </head>
+<body>
+        <div class=3D"password-reset">
+    <p>Hello admin,</p>
+
+    <p>Follow the link below to reset your password:</p>
+
+    <p><a href=3D"http://localhost:8081/rbac/user/reset-password?token=3DDH=
+flDY3aaoq5a5CbamIEemc6hnuKiJ4P_1551528927">http://localhost:8081/rbac/user/=
+reset-password?token=3DDHflDY3aaoq5a5CbamIEemc6hnuKiJ4P_1551528927</a></p>
+</div>
+    </body>
+</html>
+
+
+--_=_swift_v4_1551529026_7adc55cbecfba8724469541ef544523f_=_--
