@@ -34,15 +34,81 @@ $this->registerJs($this->render('js/index.js'));
 				'contentOptions' => ['style'=> 'text-align: center;']
 			],
 
-            'id',
+            //'id',
+
             'uuid',
             'union_id',
-            'nickname',
-            'avatarurl',
-            // 'gender',
-            // 'isfollow',
-            // 'created_at',
-            // 'updated_at',
+            [
+				'attribute' => 'avatarurl',
+				'contentOptions' => ['style'=> 'text-align: center;'],
+				'headerOptions' => ['width'=>'110','style'=> 'text-align: center;'],
+                "format"=>[
+                    "image",
+                    [
+                        "width"=>"30px",
+                        "height"=>"30px",
+                    ],
+                ],
+			],
+            //'nickname',
+            [
+            	'attribute' => 'nickname',
+				'contentOptions' => ['class'=>'text-center'],
+				'headerOptions' => ['style'=> 'text-align: center;'],
+            ],
+            [
+            	'attribute' => 'gender',
+				'contentOptions' => ['class'=>'text-center'],
+				'headerOptions' => ['style'=> 'text-align: center;'],
+				'format' => 'raw',
+				'value' => function($model){
+					if($model->gender==1){
+						return '<font color="blue">男</font>';
+					}else if($model->gender==2){
+						return '<font color="red">女</font>';
+					}else{
+						return '未知';
+					}
+				}
+            ],
+            //'gender',
+            [
+            	'attribute' => 'isfollow',
+				'contentOptions' => ['class'=>'text-center'],
+				'headerOptions' => ['style'=> 'text-align: center;'],
+				'format' => 'raw',
+				'value' => function($model){
+					return $model->isfollow==1 ? '<font color="green">已关注</font>' : '未关注';
+				}
+            ],
+            //'isfollow',
+            [
+            	'attribute' => '业务概况',
+				'contentOptions' => ['class'=>'text-center'],
+				'headerOptions' => ['style'=> 'text-align: center; color:#337ab7'],
+				'format' => 'raw',
+				'value' => function($model){
+					
+					return '未订阅';
+				}	
+            ],    
+
+           	[
+                'attribute' => 'created_at',
+				'contentOptions' => ['class'=>'text-center'],
+                "format" => ["date", "php:Y-m-d H:i:s"],
+				'headerOptions' => [
+					'style'=> 'text-align: center;'
+				],
+            ],
+           	[
+                'attribute' => 'updated_at',
+				'contentOptions' => ['class'=>'text-center'],
+                "format" => ["date", "php:Y-m-d H:i:s"],
+				'headerOptions' => [
+					'style'=> 'text-align: center;'
+				],
+            ], 
             // 'wopenid',
             // 'mopenid',
             // 'parent_uuid',
@@ -51,9 +117,9 @@ $this->registerJs($this->render('js/index.js'));
 				'header' => '操作',
 				'class' => 'yii\grid\ActionColumn',
 				'headerOptions' => [
-					'width' => '10%'
+					'width' => '5%'
 				],
-				'template' =>'{view} {update} {delete}',
+				'template' =>'{view}',
 				'buttons' => [
                     'view' => function ($url, $model, $key){
 						return Html::a('查看', Url::to(['view','id'=>$model->id]), ['class' => "layui-btn layui-btn-xs layui-default-view"]);

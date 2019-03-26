@@ -3,6 +3,9 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\web\NotFoundHttpException;
+use common\models\Operation;
 
 /**
  * This is the model class for table "c_user".
@@ -30,13 +33,27 @@ class Cuser extends \yii\db\ActiveRecord
         return 'c_user';
     }
 
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }
+
+
+    public function getOperation()
+    {
+        return $this->hasMany(Operation::className(), ['uuid'=>'uuid']);
+    }
+
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['union_id', 'created_at', 'updated_at', 'parent_uuid'], 'required'],
+            [['uuid', 'created_at', 'updated_at'], 'required'],
             [['isfollow', 'created_at', 'updated_at'], 'integer'],
             [['uuid', 'union_id', 'nickname', 'avatarurl', 'gender', 'wopenid', 'mopenid', 'parent_uuid'], 'string', 'max' => 255],
         ];
@@ -49,16 +66,16 @@ class Cuser extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'uuid' => 'Uuid',
+            'uuid' => 'uuid',
             'union_id' => 'Union ID',
-            'nickname' => 'Nickname',
-            'avatarurl' => 'Avatarurl',
-            'gender' => 'Gender',
-            'isfollow' => 'Isfollow',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'wopenid' => 'Wopenid',
-            'mopenid' => 'Mopenid',
+            'nickname' => '昵称',
+            'avatarurl' => '头像',
+            'gender' => '性别',
+            'isfollow' => '是否关注',
+            'created_at' => '创建时间',
+            'updated_at' => '最近活跃时间',
+            'wopenid' => '公众号openid',
+            'mopenid' => '小程序openid',
             'parent_uuid' => 'Parent Uuid',
         ];
     }

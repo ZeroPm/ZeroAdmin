@@ -69,7 +69,7 @@ $this->registerCss($this->render('css/view.css'));
 <div class="layui-form ">
 
     <blockquote class="layui-elem-quote layui-quote-nm">
-    基础资料
+    省份基础资料
     </blockquote>
     <!-- 基础资料 -->
     <div class="layui-row layui-fluid" style="margin-bottom: 10px; ">
@@ -110,9 +110,10 @@ $this->registerCss($this->render('css/view.css'));
     内容及通知
     </blockquote>
     <!-- 内容及通知 -->
-    <div style="text-align:center;" class="layui-hide content-loading"><i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i></div>
+    <div style="text-align:center;" class="layui-hide content-loading"><i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i>加载中</div>
     <div id="content-table">
     <script type="text/html" id='contentTpl'>
+      {{# if(d.length!=0){ }}
       {{# Object.keys(d).forEach(function(key){ }}
         <div class="layui-col-md12 content" >
                 <div class=" layui-row layui-col-space10 grid-content">
@@ -228,6 +229,9 @@ $this->registerCss($this->render('css/view.css'));
             </div>
         </div>
         {{# }); }}
+        {{# }else{ }}
+        <div style="text-align:center;" ><i class="layui-icon layui-icon-face-cry"></i>暂无内容，请添加~</div>
+        {{# } }}
   </script>
   </div> 
     <div class="layui-col-md12" style="margin-top:10px;margin-left: 10px;">

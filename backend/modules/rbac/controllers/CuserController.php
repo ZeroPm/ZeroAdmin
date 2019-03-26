@@ -8,6 +8,7 @@ use common\models\searchs\Cuser as CuserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\models\Operation;
 
 /**
  * CuserController implements the CRUD actions for Cuser model.
@@ -73,6 +74,33 @@ class CuserController extends Controller
                 'model' => $model,
             ]);
         }
+    }
+
+    //获取用户操作信息
+    public function actionOperation($uuid)
+    {
+
+        $model = new operation();
+
+        $cond = ['uuid' => $uuid];
+
+        $onetype = array();
+
+        $twotype = array();
+        //$items = $model->find()->where($cond)->with('operation')->orderBy(['created_at'=>SORT_DESC])->asArray()->all();
+
+        $items = $model->find()->where($cond)->with(['province'=>function($query){$query->select('name,province_id');}])->orderBy(['created_at'=>SORT_DESC])->asArray()->all();
+        foreach ($items as $key => $value) {
+
+            if($items[$key]['type']==1){
+                $onetype = $items[$key];
+            }else{
+                $twotype = $items[$key];
+            }
+            //print_r($items[$key]['type']);
+        }
+        //print_r($onetppe);exit();
+        return json_encode(['code'=>200,"msg"=>"成功",'onedata'=>$onetype,'twodata'=>$twotype]);
     }
 
     /**

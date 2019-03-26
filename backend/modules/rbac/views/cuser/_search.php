@@ -21,15 +21,15 @@ AppAsset::register($this);
 	   ],
     ]); ?>
 
-    <?= $form->field($model, 'id')->textInput(['class'=>'layui-input']) ?>
+    <!-- <?= $form->field($model, 'id')->textInput(['class'=>'layui-input']) ?> -->
 
     <?= $form->field($model, 'uuid')->textInput(['class'=>'layui-input']) ?>
 
     <?= $form->field($model, 'union_id')->textInput(['class'=>'layui-input']) ?>
 
-    <?= $form->field($model, 'nickname')->textInput(['class'=>'layui-input']) ?>
+    <!-- <?= $form->field($model, 'nickname')->textInput(['class'=>'layui-input']) ?>
 
-    <?= $form->field($model, 'avatarurl')->textInput(['class'=>'layui-input']) ?>
+    <?= $form->field($model, 'avatarurl')->textInput(['class'=>'layui-input']) ?> -->
 
     <?php // echo $form->field($model, 'gender') ?>
 
