@@ -40,11 +40,17 @@ class Cuser extends \yii\db\ActiveRecord
         ];
     }
 
-
+    //1对多获取数据
+    public function getOperations()
+    {
+        return $this->hasMany(Operation::className(), ['uuid'=>'id']);
+    }
+    //只获取一条数据
     public function getOperation()
     {
-        return $this->hasMany(Operation::className(), ['uuid'=>'uuid']);
+        return $this->hasOne(Operation::className(), ['uuid'=>'id']);
     }
+
 
 
     /**
@@ -53,9 +59,9 @@ class Cuser extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['uuid', 'created_at', 'updated_at'], 'required'],
+            [['session_key'], 'required'],
             [['isfollow', 'created_at', 'updated_at'], 'integer'],
-            [['uuid', 'union_id', 'nickname', 'avatarurl', 'gender', 'wopenid', 'mopenid', 'parent_uuid'], 'string', 'max' => 255],
+            [['uuid', 'union_id', 'nickname', 'avatarurl', 'gender', 'wopenid', 'mopenid', 'parent_uuid','session_key'], 'string', 'max' => 255],
         ];
     }
 
@@ -77,6 +83,20 @@ class Cuser extends \yii\db\ActiveRecord
             'wopenid' => '公众号openid',
             'mopenid' => '小程序openid',
             'parent_uuid' => 'Parent Uuid',
+            'session_key' => 'Session_key'
         ];
     }
+
+    //小程序openid查询
+    public static function findByOpenidm($openid)
+    {
+        return Cuser::findOne(['mopenid' => $openid]);
+    }
+
+    //服务号openid查询
+    public static function findByOpenidw($openid)
+    {
+        return Cuser::findOne(['wopenid' => $openid]);
+    }
+
 }

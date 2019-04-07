@@ -10,22 +10,21 @@ layui.config({
 	,suboperationdata = document.getElementById('sub-operation-data')
 	,firstTpl = firstoperationTpl.innerHTML
 	,firstoperationdata = document.getElementById('first-operation-data')
-	,href = "<?= yii\helpers\Url::to(['cuser/operation']);?>"
-	,uuid = $('.uuid').text();
+	,href = "<?= yii\helpers\Url::to(['cuser/operation']);?>";
 	function loadOperation(){
 		$('.content-loading').removeClass('layui-hide');
 		setTimeout(function(){
 			//console.log(uuid);
-		$.get(href+'?uuid='+uuid,function(data){
+		$.get(href+'?'+"<?= $_SERVER['QUERY_STRING'];?>",function(data){
 	        console.log(data);
 	        if(data.code===200){
 	        	//layer.msg(data.msg);
 	        	var onedata = data.onedata;
 	        	var twodata = data.twodata;
 	        	//json遍历实验
-	   // 			Object.keys(operationdata).forEach(function(key){
+	   // 			Object.keys(data.item).forEach(function(key){
 
-				// console.log(key,operationdata[key]['uuid']);
+				// console.log(key,data.item[key]['id']);
 
 				// 	// Object.keys(contentdata[key]['inform']).forEach(function(key){
 

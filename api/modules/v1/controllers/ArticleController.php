@@ -9,7 +9,7 @@ use yii\helpers\ArrayHelper;
 
 class ArticleController extends ActiveController
 {	
-    public $modelClass = 'common\models\Article';
+    public $modelClass = 'common\models\UserRank';
 	
     public function behaviors() {
         return ArrayHelper::merge (parent::behaviors(), [ 

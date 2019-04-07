@@ -180,7 +180,7 @@ class ipaddress extends Component {
             if (preg_match('/http/i', $ipaddr) || $ipaddr == '') {
                 $ipaddr = '- Unknown';
             }
-            $ipaddr =  iconv("gb2312", "UTF-8", $ipaddr);
+            $ipaddr =  iconv("gb2312", "UTF-8//ignore", $ipaddr);
             return $ipaddr;
         }
     }

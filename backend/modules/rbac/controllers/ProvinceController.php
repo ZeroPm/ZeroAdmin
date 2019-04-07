@@ -155,22 +155,25 @@ class ProvinceController extends Controller
         }
     }
 
-    //调试Lay table使用
-    public function actionTestView($limit)
+    //编辑链接
+    public function actionEditlk()
     {
-
-        $sql = Province::find();
-
-        $total = $sql->count();//总共有多少数据
-        
-        $pager = new Pagination(['totalCount' => $total,'pageSize'=>$limit]);//分页
-
-        $items = $sql->offset($pager->offset)->limit($limit)->all();
-        //print_r($pager->offset);exit();
-        $data = array('code'=>0, 'msg'=> '', 'count'=>$total, 'data'=>$items);
-        
-        return Json::encode($data);//自定义返回函数，
-        
+        $data = Yii::$app->request->post();
+        if($data){
+            $model = $this->findModel($data['id']);
+            //echo $id;exit();
+            
+            $model->link = $data['link'];
+            
+            if($model->save()){
+                return json_encode(['code'=>200,"msg"=>"编辑成功"]);
+            }else{
+                $errors = $model->firstErrors;
+                return json_encode(['code'=>400,"msg"=>reset($errors)]);
+            }
+        }else{
+            return json_encode(['code'=>400,"msg"=>"数据获取失败"]);
+        }       
     }
 
     //开启操作

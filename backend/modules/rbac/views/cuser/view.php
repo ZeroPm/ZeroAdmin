@@ -47,12 +47,12 @@ LayuiAsset::register($this);
                     uuid
                 </div>
             </div>
-            <div class="layui-col-md1">
+            <div class="layui-col-md2">
                 <div class="grid-basis content-text">
                     union_id
                 </div>
             </div>
-            <div class="layui-col-md2">
+            <div class="layui-col-md1">
                 <div class="grid-basis text-center content-text">
                    头像
                 </div>
@@ -91,22 +91,22 @@ LayuiAsset::register($this);
         <div class="layui-row layui-fluid" style="margin-bottom: 10px; ">
             <div class="layui-col-md1">
                 <div class="grid-basis content-text">
-                    <div class='uuid'><?= $model->uuid;?></div>
+                    <div class='uuid'><?= $model->uuid?$model->uuid:'&nbsp'; ?></div>
                 </div>
             </div>
-            <div class="layui-col-md1">
-                <div class="grid-basis content-text">
-                    <?= $model->union_id;?>
+            <div class="layui-col-md2">
+                <div class="grid-basis content-text layui-elip">
+                    <?= $model->union_id?$model->union_id:'&nbsp';?>
                 </div>
             </div>
-            <div class="layui-col-md2 ">
+            <div class="layui-col-md1 ">
                 <div class="grid-basis text-center content-text">
                    <img src="<?= $model->avatarurl;?>" width="30px" height="30px">
                 </div>
             </div>
             <div class="layui-col-md1">
                 <div class="grid-basis text-center content-text">
-                   <?= $model->nickname;?> 
+                   <?= $model->nickname?$model->nickname:'&nbsp';?> 
                 </div>
             </div>
             <div class="layui-col-md1">
@@ -153,7 +153,7 @@ LayuiAsset::register($this);
                         <i class="layui-icon layui-timeline-axis"></i>
                         {{# } }}
                         <div class="layui-timeline-content layui-text">
-                          <div class="layui-timeline-title">{{timestampToTime(d[key]['created_at']) }}&nbsp&nbsp&nbsp{{ d[key]['province']['name'] }}&nbsp&nbsp&nbsp{{ d[key]['isub']==1?'未报名':'已报名' }}</div>
+                          <div class="layui-timeline-title">{{timestampToTime(d[key]['created_at']) }}&nbsp&nbsp&nbsp{{ d[key]['province']?d[key]['province']['name']:'未知有BUG' }}&nbsp&nbsp&nbsp{{ d[key]['isub']==1?'未报名':'已报名' }}</div>
                         </div>
                       </li>
                     {{# }); }}
@@ -179,7 +179,7 @@ LayuiAsset::register($this);
                         <i class="layui-icon layui-timeline-axis"></i>
                         {{# } }}
                         <div class="layui-timeline-content layui-text">
-                          <div class="layui-timeline-title">{{timestampToTime(d[key]['created_at']) }}&nbsp&nbsp&nbsp{{ d[key]['province']['name'] }}</div>
+                          <div class="layui-timeline-title">{{timestampToTime(d[key]['created_at']) }}&nbsp&nbsp&nbsp{{ d[key]['province']?d[key]['province']['name']:'未知有BUG' }}</div>
                         </div>
                       </li>
                     {{# }); }}
@@ -219,25 +219,3 @@ LayuiAsset::register($this);
 </div>
 
 
-<!-- <div class="cuser-view">
-    <?= DetailView::widget([
-        'model' => $model,
-		'options' => ['class' => 'layui-table'],
-		'template' => '<tr><th width="100px">{label}</th><td>{value}</td></tr>', 
-        'attributes' => [
-            'id',
-            'uuid',
-            'union_id',
-            'nickname',
-            'avatarurl',
-            'gender',
-            'isfollow',
-            'created_at',
-            'updated_at',
-            'wopenid',
-            'mopenid',
-            'parent_uuid',
-        ],
-    ]) ?>
-
-</div> -->

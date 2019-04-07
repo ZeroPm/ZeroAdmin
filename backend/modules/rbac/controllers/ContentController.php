@@ -166,7 +166,7 @@ class ContentController extends Controller
 
             $model->identity = $data['keys']['identity'];
 
-            //return json_encode(['code'=>200,"msg"=>"编辑成功",'data'=>$data]);
+            //return json_encode(['code'=>200,"msg"=>"编辑成功",'data'=>$data['keys']['content']]);
 
             if ($model->save()) {
 

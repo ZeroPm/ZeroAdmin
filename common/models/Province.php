@@ -5,6 +5,7 @@ namespace common\models;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\web\NotFoundHttpException;
+use common\models\Content;
 
 /**
  * This is the model class for table "b_province".
@@ -40,6 +41,11 @@ class Province extends \yii\db\ActiveRecord
         return [
             TimestampBehavior::className(),
         ];
+    }
+
+    public function getContent()
+    {
+        return $this->hasMany(Content::className(), ['province_id'=>'province_id']);
     }
 
     /**
@@ -85,6 +91,19 @@ class Province extends \yii\db\ActiveRecord
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public static function findName($name)
+    {
+        //return $name;
+        // if (($model = Province::findOne(['fullname' => $name])) !== null) {
+        //     return $model;
+        // } else {
+        //     //api项目需要调取的方法不能这么写
+        //     //throw new NotFoundHttpException('The requested page does not exist.');
+        //     return false;
+        // }
+        return Province::findOne(['fullname' => $name]);
     }
 
 }

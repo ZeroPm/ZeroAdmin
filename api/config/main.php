@@ -46,6 +46,12 @@ return [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => ['v1/wechat'],
                     'pluralize'=>false,
+                    'extraPatterns' => [
+                        'POST login' => 'login',
+                        'POST content' => 'content',
+                        'GET map' => 'map',
+                        'POST addop' => 'addop',
+                    ]
                 ],
 				[
 					'class' => 'yii\rest\UrlRule',

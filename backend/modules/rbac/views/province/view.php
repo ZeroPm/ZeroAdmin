@@ -82,7 +82,7 @@ $this->registerCss($this->render('css/view.css'));
         <div class="layui-col-md3">
             <div class="grid-basis">
                 <div class="layui-elip layui-col-md9"><a target="view_window" href="<?= $model->link ?>"><?= $model->link ?></a></div>
-                <div class="layui-col-md3"><i class="layui-icon layui-icon-edit" style="font-size: 25px;"></i></div>
+                <div class="layui-col-md3 "><i class="layui-icon layui-icon-edit updata-link" style="font-size: 25px;"></i></div>
             </div>
         </div>
         <div class="layui-col-md2">
@@ -240,31 +240,22 @@ $this->registerCss($this->render('css/view.css'));
     </div>             
 </div>
 
-<!-- <div class="province-view">
-    <?= DetailView::widget([
-        'model' => $model,
-		'options' => ['class' => 'layui-table'],
-		'template' => '<tr><th width="30%">{label}</th><td>{value}</td></tr>', 
-        'attributes' => [
-            'id',
-            'province_id',
-            'name',
-            'fullname',
-            'pinyin',
-            'location',
-            'cidx',
-            'link:ntext',
-            'status',
-            [
-                "attribute" => "created_at",
-                "format" => ["date", "php:Y-m-d H:i:s"],
-            ],
-            [
-                "attribute" => "updated_at",
-                "format" => ["date", "php:Y-m-d H:i:s"],
-            ],
-        ],
-    ]) ?>
-
-</div> -->
+  <div id="link-form" class="layui-hide" style="padding:20px;">
+    <form class="layui-form" lay-filter="link-form">
+      <div class="layui-form-item">
+        <label class="layui-form-label">链接地址</label>
+        <div class="layui-input-block">
+          <input type="text" name="link" class="layui-input" value="<?= $model->link;?>">
+        </div>
+        <input type="text" name="id" class="layui-input layui-hide" value="<?= $model->id;?>">
+      </div>
+      <div class="layui-form-item">
+        <div class="layui-input-block">
+            <div align='right'>
+            <button class="layui-btn" lay-submit lay-filter="go">编辑</button>
+            </div>
+        </div>
+      </div>
+    </form>
+  </div>
 

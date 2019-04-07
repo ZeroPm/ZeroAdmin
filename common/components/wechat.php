@@ -63,7 +63,7 @@ class wechat extends Component {
      * 接口类型模式
      * @var string
      */
-    private static $type = 'WeChat';
+    private static $type = 'wechat';
 
     /**
      * 获取微信实例ID
@@ -76,9 +76,12 @@ class wechat extends Component {
     public function instance($name, $type = null)
     {
         if (!in_array($type, ['WeChat', 'WeMini'])) {
+            
             $type = self::$type;
         }
+
 		$class = "\\{$type}\\" . ucfirst(strtolower($name));
+        //print_r($class);exit();
 		if (class_exists($class)) {
 			return new $class($this->config);
 		}
@@ -105,6 +108,8 @@ class wechat extends Component {
             self::$type = 'WePay';
             $name = substr($name, 5);
         }
+        //print_r(self::$type);exit();
         return $this->instance($name);
     }
+
 }

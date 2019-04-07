@@ -3,8 +3,8 @@
 namespace common\models;
 
 use Yii;
-use yii\behaviors\TimestampBehavior;
 use common\models\Province;
+use yii\web\NotFoundHttpException;
 
 /**
  * This is the model class for table "c_operation".
@@ -26,12 +26,6 @@ class Operation extends \yii\db\ActiveRecord
         return 'c_operation';
     }
 
-    public function behaviors()
-    {
-        return [
-            TimestampBehavior::className(),
-        ];
-    }
 
    public function getProvince()
     {
@@ -44,9 +38,10 @@ class Operation extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['uuid', 'province_id', 'created_at','isub'], 'required'],
-            [['type', 'province_id', 'created_at','isub'], 'integer'],
-            [['uuid'], 'string', 'max' => 255],
+            [['uuid', 'province_id','type'], 'required'],
+            [['type', 'province_id', 'created_at'], 'integer'],
+            //暂时使用的Cuser表中的自增长ID。验证规则冲突。
+            //[['uuid'], 'string', 'max' => 255],
         ];
     }
 

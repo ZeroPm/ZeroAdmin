@@ -54,7 +54,8 @@ class LoginForm extends Model
     public function login()
     {
         if ($this->validate()) {
-            $accessToken = $this->_user->generateAccessToken(time()+2400);
+            //每次更新会刷新token，暂时屏蔽掉，后续改造~~~
+            //$accessToken = $this->_user->generateAccessToken(time()+2400);
 			//下面更新用户登录相关信息
 			$this->_user->last_login_date = time();
 			$this->_user->last_login_ip = Yii::$app->request->getRemoteIP();
