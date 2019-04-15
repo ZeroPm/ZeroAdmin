@@ -37,19 +37,35 @@ class LoginCuser extends Model
     		$model = Cuser::findByOpenidm($this->openid);
     		$model->updated_at = time();
 			$model->session_key = $this->session_key;
-			if( $model->union_id ){
-
-			}else{
-				$model->union_id = array_key_exists("unionid",$data) ? $data['unionid'] : '';
+            $model->nickname = array_key_exists("nickName",$data) ? $data['nickName'] : '';
+            $model->gender = array_key_exists("gender",$data) ? $data['gender'] : '';
+            $model->avatarurl = array_key_exists("avatarUrl",$data) ? $data['avatarUrl']:'';
+			if(!$model->union_id ){
+                if(array_key_exists("unionid",$data)){
+                    //小程序登录时的unionid绑定
+                    $model->union_id = $data['unionid'];
+                }else if(array_key_exists("unionId",$data)){
+                    //小程序解密后unionId绑定
+                    $model->union_id = $data['unionId'];
+                }
 			}
 			$model->isfollow = array_key_exists("unionid",$data) ? 1 : 0 ;
-            $model->save();
+            $model->save();  
             return  $model;
     	}else{
     		$model = new Cuser();
     		$model->mopenid = $data['openid'];
     		$model->session_key = $this->session_key;
-    		$model->union_id = array_key_exists("unionid",$data) ? $data['unionid'] : '';
+            $model->nickname = array_key_exists("nickName",$data) ? $data['nickName'] : '';
+            $model->gender = array_key_exists("gender",$data)?$data['gender'] : '';
+            $model->avatarurl = array_key_exists("avatarUrl",$data) ? $data['avatarUrl'] : '';
+            if(array_key_exists("unionid",$data)){
+                //小程序登录时的unionid绑定
+                $model->union_id = $data['unionid'];
+            }else if(array_key_exists("unionId",$data)){
+                //小程序解密后unionId绑定
+                $model->union_id = $data['unionId'];
+            }
     		$model->isfollow = array_key_exists("unionid",$data) ? 1 : 0 ;
     		$model->save();
     		return $model;
@@ -69,6 +85,19 @@ class LoginCuser extends Model
     	$userdata['access_token'] = '2as-xegy1TpHbjqYKVgeWCdGMm6e6Lda_1553947200';
     	
     	return $userdata;
+    }
+
+    public function update($openid,$isfollow,$isread)
+    {
+        $model = Cuser::findByOpenidm($openid);
+        //isfollow的更新根据后续运营情况决定是否再次提示
+        //$model->isfollow = $isfollow;
+        $isread ? $model->isread=$isread : '';
+        if($model->save()){
+            return $model;
+        }else{
+            return false;
+        }
     }
 
 }

@@ -7,6 +7,7 @@ use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use yii\data\Pagination;
 use yii\base\Model;
+use common\models\Isread;
 
 
 /**
@@ -49,6 +50,11 @@ class Announcement extends \yii\db\ActiveRecord
                 ],
             ],
         ];
+    }
+
+    public function getIsread()
+    {
+        return $this->hasMany(Isread::className(), ['announcement_id'=>'id']);
     }
 
     /**

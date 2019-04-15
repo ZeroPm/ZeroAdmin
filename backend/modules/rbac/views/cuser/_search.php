@@ -23,7 +23,7 @@ AppAsset::register($this);
 
     <!-- <?= $form->field($model, 'id')->textInput(['class'=>'layui-input']) ?> -->
 
-    <?= $form->field($model, 'uuid')->textInput(['class'=>'layui-input']) ?>
+    <?= $form->field($model, 'mopenid')->textInput(['class'=>'layui-input']) ?>
 
     <?= $form->field($model, 'union_id')->textInput(['class'=>'layui-input']) ?>
 

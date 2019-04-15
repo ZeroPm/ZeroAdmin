@@ -61,4 +61,9 @@ class Operation extends \yii\db\ActiveRecord
             'isub' => 'Isub',
         ];
     }
+
+    public static function isSub($id)
+    {
+        return Operation::findOne(['uuid' => $id,'type'=>2]);
+    }
 }

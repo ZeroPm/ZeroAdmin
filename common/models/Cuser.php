@@ -60,8 +60,8 @@ class Cuser extends \yii\db\ActiveRecord
     {
         return [
             [['session_key'], 'required'],
-            [['isfollow', 'created_at', 'updated_at'], 'integer'],
-            [['uuid', 'union_id', 'nickname', 'avatarurl', 'gender', 'wopenid', 'mopenid', 'parent_uuid','session_key'], 'string', 'max' => 255],
+            [['isfollow', 'created_at', 'updated_at', 'gender','isread'], 'integer'],
+            [['uuid', 'union_id', 'nickname', 'avatarurl', 'wopenid', 'mopenid', 'parent_uuid','session_key'], 'string', 'max' => 255],
         ];
     }
 
@@ -83,7 +83,8 @@ class Cuser extends \yii\db\ActiveRecord
             'wopenid' => '公众号openid',
             'mopenid' => '小程序openid',
             'parent_uuid' => 'Parent Uuid',
-            'session_key' => 'Session_key'
+            'session_key' => 'Session_key',
+            'isread' => 'isread'
         ];
     }
 

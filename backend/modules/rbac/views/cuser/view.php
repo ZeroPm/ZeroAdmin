@@ -1,6 +1,7 @@
 <?php
 use yii\widgets\DetailView;
 use backend\assets\LayuiAsset;
+use common\models\Operation;
 
 if($model->gender==1){
     $model->gender = '<font color="blue">男</font>';
@@ -42,16 +43,16 @@ LayuiAsset::register($this);
     <!-- 基础资料 -->
     <div class="content">
         <div class="layui-row layui-fluid" style="margin-bottom: 10px; background-color: #e6e6e6;" >
-            <div class="layui-col-md1">
+            <div class="layui-col-md3">
                 <div class="grid-basis content-text">
-                    uuid
+                    小程序opneid
                 </div>
             </div>
-            <div class="layui-col-md2">
+            <!-- <div class="layui-col-md2">
                 <div class="grid-basis content-text">
                     union_id
                 </div>
-            </div>
+            </div> -->
             <div class="layui-col-md1">
                 <div class="grid-basis text-center content-text">
                    头像
@@ -89,16 +90,16 @@ LayuiAsset::register($this);
             </div>
         </div>
         <div class="layui-row layui-fluid" style="margin-bottom: 10px; ">
-            <div class="layui-col-md1">
+            <div class="layui-col-md3">
                 <div class="grid-basis content-text">
-                    <div class='uuid'><?= $model->uuid?$model->uuid:'&nbsp'; ?></div>
+                    <div class='uuid'><?= $model->mopenid?$model->mopenid:'&nbsp'; ?></div>
                 </div>
             </div>
-            <div class="layui-col-md2">
+            <!-- <div class="layui-col-md2">
                 <div class="grid-basis content-text layui-elip">
                     <?= $model->union_id?$model->union_id:'&nbsp';?>
                 </div>
-            </div>
+            </div> -->
             <div class="layui-col-md1 ">
                 <div class="grid-basis text-center content-text">
                    <img src="<?= $model->avatarurl;?>" width="30px" height="30px">
@@ -121,7 +122,7 @@ LayuiAsset::register($this);
             </div>
             <div class="layui-col-md1">
                 <div class="grid-basis text-center content-text">
-                   123
+                   <?= Operation::isSub($model->id) ? '<font color="green">已订阅</font>':'未订阅';?>
                 </div>
             </div>
             <div class="layui-col-md2">

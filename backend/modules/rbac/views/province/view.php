@@ -164,12 +164,12 @@ $this->registerCss($this->render('css/view.css'));
                     </div>
                 </div>
                 <div class="layui-row layui-col-space10 grid-content">
-                  <div class=" layui-col-md2">
+                  <div class=" layui-col-md3">
                     <div class="content-text">
                       <label class="layui-form-label">链接类型：</label><div class="layui-input-block ">{{ linkType(d[key]['link_type']) }}</div>
                     </div>
                   </div>
-                  <div class=" layui-col-md5">
+                  <div class=" layui-col-md4">
                     <div class="content-text layui-elip">
                       <label class="layui-form-label">链接地址：</label><a target="view_window" href="{{ d[key]['link'] }}">{{ d[key]['link'] }}</a>
                     </div>

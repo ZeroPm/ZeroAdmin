@@ -10,6 +10,7 @@ use yii\helpers\Url;
 use backend\assets\LayuiAsset;
 use yii\grid\GridView;
 use common\models\Announcement;
+
 LayuiAsset::register($this); 
 $this->registerJs($this->render('js/index.js'));
 /* @var $this yii\web\View */

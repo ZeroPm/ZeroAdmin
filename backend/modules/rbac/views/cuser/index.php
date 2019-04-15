@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use backend\assets\LayuiAsset;
 use yii\grid\GridView;
+use common\models\Operation;
 LayuiAsset::register($this); 
 $this->registerJs($this->render('js/index.js'));
 /* @var $this yii\web\View */
@@ -36,7 +37,7 @@ $this->registerJs($this->render('js/index.js'));
 
             //'id',
 
-            'uuid',
+            'mopenid',
             'union_id',
             [
 				'attribute' => 'avatarurl',
@@ -89,7 +90,7 @@ $this->registerJs($this->render('js/index.js'));
 				'format' => 'raw',
 				'value' => function($model){
 					
-					return '未订阅';
+					return Operation::isSub($model->id) ? '<font color="green">已订阅</font>':'未订阅';
 				}	
             ],    
 

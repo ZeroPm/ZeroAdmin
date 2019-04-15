@@ -37,7 +37,7 @@ class WechatController extends ActiveController
 			
 			if(array_key_exists("errcode",$weminidata)){
 
-				return ['code'=>400,"msg"=>'登录失败',"data"=>$weminidata];
+				return ['code'=>$weminidata['errcode'],"msg"=>'登录失败',"data"=>$weminidata];
 
 			}else{
 		
@@ -54,6 +54,8 @@ class WechatController extends ActiveController
 				$userdata['isfollow'] = $user->isfollow;
 
 				$userdata['unionid'] = $user->union_id;
+				$userdata['isread'] = $user->isread;
+				// $userdata['nickname'] = $user->nickname;
 
 		        return ['code'=>200,"msg"=>'登录成功',"data"=>$userdata];
 			}
@@ -124,6 +126,85 @@ class WechatController extends ActiveController
 		}else{
 			return ['code'=>400,"msg"=>'未接收到数据'];
 		}
+	}
+
+	//省份数据接口
+	public function actionItem()
+	{
+		$model = new GetProvince();
+		return ['code'=>200,"msg"=>'数据获取成功',"data"=>$model->getItem()];
+	}
+
+	//解密授权用户数据，并更新用户unionid
+	public function actionDecrypt()
+	{
+		$data = Yii::$app->request->post();
+
+		if($data){
+
+			$decryptData = Yii::$app->wechat->WeMiniCrypt()->userInfo($data['code'],$data['iv'],$data['encryptedData']);
+
+			$model = new LoginCuser();
+
+			$model->setAttributes($decryptData);
+
+			$user = $model->getUser($decryptData);
+
+			$userdata = $user->union_id;
+
+			return ['code'=>200,"msg"=>'成功','data'=>$userdata];
+		}else{
+			return ['code'=>400,"msg"=>'未接收到数据'];
+		}		
+	}
+
+	//更新小程序用户部分信息
+	public function actionUpuser()
+	{
+		$data = Yii::$app->request->post();
+
+		if($data){
+
+			$model = new LoginCuser();
+
+			if($userdata = $model->update($data['openid'],$data['isfollow'],$data['isread'])){
+				return ['code'=>200,"msg"=>'成功','data'=>$userdata];
+			}else{
+				return ['code'=>200,"msg"=>'成功','data'=>$data];
+			}
+		}else{
+			return ['code'=>400,"msg"=>'未接收到数据'];
+		}		
+	}
+
+	//获取省公告
+	public function actionGetann($province_id,$openid,$create_time)
+	{
+		$model = new GetProvince();
+		$item = $model->getAnn($province_id,$openid);
+		foreach ($item as $key => $value) {
+
+            if($item[$key]['created_at']>=$create_time){
+            	
+            	$item[$key]['isread'] ? $item[$key]['Isread'] = 1 : $item[$key]['Isread'] = 0;
+            }else{
+                $item[$key]['Isread'] = -1;
+            }
+            //print_r($onetype);
+        }
+		return ['code'=>200,"msg"=>'成功','data'=>$item];
+	}
+
+	public function actionRead()
+	{
+		$data = Yii::$app->request->post();
+		if($data){
+			$model = new GetProvince();
+			return ['code'=>200,"msg"=>'成功','data'=>$model->read($data)];
+		}else{
+			return ['code'=>400,"msg"=>'未接收到数据'];
+		}
+		
 	}
 
 }

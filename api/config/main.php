@@ -51,6 +51,11 @@ return [
                         'POST content' => 'content',
                         'GET map' => 'map',
                         'POST addop' => 'addop',
+                        'GET item' => 'item',
+                        'POST decrypt' => 'decrypt',
+                        'POST upuser' => 'upuser',
+                        'GET getann' => 'getann',
+                        'POST read' => 'read',
                     ]
                 ],
 				[
