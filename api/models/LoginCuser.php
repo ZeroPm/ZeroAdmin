@@ -78,9 +78,9 @@ class LoginCuser extends Model
 
     	$operation = new Operation();
 
-    	$userdata['first'] = $operation->find()->select(['province_id','type','created_at','isub'])->where(['uuid'=>$id,'type'=>1])->orderBy('created_at DESC')->asArray()->one();
+    	$userdata['first'] = $operation->find()->select(['id','province_id','type','created_at','isub','updated_at'])->where(['uuid'=>$id,'type'=>1])->orderBy('created_at DESC')->asArray()->one();
 
-    	$userdata['sub'] = $operation->find()->select(['province_id','type','created_at','isub'])->where(['uuid'=>$id,'type'=>2])->orderBy('created_at DESC')->asArray()->one();
+    	$userdata['sub'] = $operation->find()->select(['id','province_id','type','created_at','isub','updated_at'])->where(['uuid'=>$id,'type'=>2])->orderBy('created_at DESC')->asArray()->one();
         //静态返回token后续要优化呀，蛋疼
     	$userdata['access_token'] = '2as-xegy1TpHbjqYKVgeWCdGMm6e6Lda_1553947200';
     	

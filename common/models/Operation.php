@@ -39,7 +39,7 @@ class Operation extends \yii\db\ActiveRecord
     {
         return [
             [['uuid', 'province_id','type'], 'required'],
-            [['type', 'province_id', 'created_at'], 'integer'],
+            [['type', 'province_id', 'created_at','updated_at'], 'integer'],
             //暂时使用的Cuser表中的自增长ID。验证规则冲突。
             //[['uuid'], 'string', 'max' => 255],
         ];
@@ -57,7 +57,8 @@ class Operation extends \yii\db\ActiveRecord
             'uuid' => 'Uuid',
             'type' => 'Type',
             'province_id' => 'Province ID',
-            'created_at' => 'Created At',
+            'created_at' => '创建时间',
+            'updated_at' => '更新时间',
             'isub' => 'Isub',
         ];
     }
@@ -65,5 +66,10 @@ class Operation extends \yii\db\ActiveRecord
     public static function isSub($id)
     {
         return Operation::findOne(['uuid' => $id,'type'=>2]);
+    }
+
+    public static function findById($id)
+    {
+        return Operation::findOne(['id' => $id]);
     }
 }

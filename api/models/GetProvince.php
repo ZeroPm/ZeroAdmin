@@ -10,7 +10,7 @@ use common\models\Announcement;
 use common\models\Isread;
 use yii\web\NotFoundHttpException;
 use yii\db\Command;
-
+use yii\data\Pagination;
 /**
  * Login form
  */
@@ -59,6 +59,7 @@ class GetProvince extends Model
     	$model->province_id = $province_id;
     	$model->isub = $isub;
     	$model->created_at = time();
+        $model->updated_at = time();
     	if($model->save()){
     		return  $model;
     	}else{
@@ -88,21 +89,24 @@ class GetProvince extends Model
     }
 
     //获取公告
-    public function getAnn($province_id,$openid)
+    public function getAnn($province_id,$openid,$limit)
     {
         $this->openid = $openid;
         $model = new Announcement();
-        $item = $model->find()->select('id,province_id,title,link,status,date,created_at')->where(['province_id'=>$province_id,'status'=>1])->with(
+        $count = $model->find()->where(['province_id'=>$province_id,'status'=>1])->count();
+        $items['pages'] = new Pagination(['totalCount' => $count,'pageSize'=>$limit]);
+        $items['item'] = $model->find()->select('id,province_id,title,link,status,date,created_at')->where(['province_id'=>$province_id,'status'=>1])->with(
             ['isread'=>function($query){
                 $cond = ['openid'=>$this->openid,'isready'=>1];
                 $query->andwhere($cond);
                 }
             ]
-        )->orderBy('date DESC')->asArray()->all();
+        )->offset($items['pages']->offset)->limit($limit)->orderBy('date DESC')->asArray()->all();
 
         //$item = $model->find()->select('id,province_id,title,link,status,date')->where(['province_id'=>$province_id])->with(['isread'])->asArray()->all();
+        //$items['item'] = $item;
 
-        return $item;
+        return $items;
 
     }
 
@@ -114,6 +118,18 @@ class GetProvince extends Model
         $model->announcement_id = $data['announcement_id'];
         $model->isready = $data['isread'];
         $model->created_at = time();
+        if($model->save()){
+            return  $model;
+        }else{
+            return  false;
+        }
+    }
+
+    //批量已读使用了Upadated_at时间作为处理标准。这没办法，这种方法最简单。
+    public function readAll($id)
+    {
+        $model = Operation::findById($id);
+        $model->updated_at = time();
         if($model->save()){
             return  $model;
         }else{

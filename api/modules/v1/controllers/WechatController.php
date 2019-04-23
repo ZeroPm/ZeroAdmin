@@ -8,6 +8,8 @@ use yii\helpers\ArrayHelper;
 use yii\filters\auth\QueryParamAuth;
 use api\models\LoginCuser;
 use api\models\GetProvince;
+use yii\data\ArrayDataProvider;
+use common\models\Config;
 
 class WechatController extends ActiveController
 {	
@@ -26,6 +28,12 @@ class WechatController extends ActiveController
                 ] 
         ] );
     }
+
+    public $serializer = [
+        'class' => 'yii\rest\Serializer',
+        'collectionEnvelope' => 'items',
+    ];
+
     //获取用户及操作信息
     public function actionLogin ()
 	{
@@ -119,6 +127,8 @@ class WechatController extends ActiveController
 				$operations['type'] = $operation->type;
 				$operations['created_at'] = $operation->created_at;
 				$operations['isub'] = $operation->isub;
+				$operations['id'] = $operation->id;
+				$operations['updated_at'] = $operation->updated_at;
 				return ['code'=>200,"msg"=>'操作写入成功',"data"=>$operations];
 			}else{
 				return ['code'=>400,"msg"=>'操作写入失败'];
@@ -178,23 +188,26 @@ class WechatController extends ActiveController
 	}
 
 	//获取省公告
-	public function actionGetann($province_id,$openid,$create_time)
+	public function actionGetann($province_id,$openid,$updated_at)
 	{
 		$model = new GetProvince();
-		$item = $model->getAnn($province_id,$openid);
-		foreach ($item as $key => $value) {
+		
+		$items = $model->getAnn($province_id,$openid,10);
 
-            if($item[$key]['created_at']>=$create_time){
+        foreach ($items['item'] as $key => $value) {
+
+            if($items['item'][$key]['created_at']>=$updated_at){
             	
-            	$item[$key]['isread'] ? $item[$key]['Isread'] = 1 : $item[$key]['Isread'] = 0;
+            	$items['item'][$key]['isread'] ? $items['item'][$key]['Isread'] = 1 : $items['item'][$key]['Isread'] = 0;
             }else{
-                $item[$key]['Isread'] = -1;
+                $items['item'][$key]['Isread'] = -1;
             }
-            //print_r($onetype);
         }
-		return ['code'=>200,"msg"=>'成功','data'=>$item];
+
+		return ['code'=>200,"msg"=>'成功','data'=>$items['item'],'page'=>$items['pages']->page,'pageCount'=>$items['pages']->pageCount];
 	}
 
+	//单个点击公告已读
 	public function actionRead()
 	{
 		$data = Yii::$app->request->post();
@@ -205,6 +218,35 @@ class WechatController extends ActiveController
 			return ['code'=>400,"msg"=>'未接收到数据'];
 		}
 		
+	}
+
+	//批量已读
+	public  function actionReads()
+	{
+		$data = Yii::$app->request->post();
+		if($data){
+			$model = new GetProvince();
+			$data = $model->readAll($data['id']);
+			if($data){
+				return ['code'=>200,"msg"=>'成功','data'=>$data];
+			}else{
+				return ['code'=>400,"msg"=>'已读操作失败'];
+			}
+			
+		}else{
+			return ['code'=>400,"msg"=>'未接收到数据'];
+		}
+	}
+
+
+	//字典表中的通用配置信息
+	//MINI_REVIEW 小程序送审开关
+	//MINI_STATEMENT 小程序公告声明
+	public function actionConfig()
+	{
+		$review = Config::getConfigs('MINI_REVIEW');
+		$statement = Config::getConfigs('MINI_STATEMENT');
+		return ['code'=>200,"msg"=>'成功','review'=>$review,'statement'=>$statement];
 	}
 
 }

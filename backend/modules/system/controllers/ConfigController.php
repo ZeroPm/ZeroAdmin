@@ -37,7 +37,7 @@ class ConfigController extends Controller
     {
         $searchModel = new ConfigSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        //print_r(Yii::$app->memcache->get('MINI_REVIEW'));exit();
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -87,6 +87,7 @@ class ConfigController extends Controller
         if ($model->load(Yii::$app->request->post())) {
 			$model->updated_at = time();
 			if($model->save()){
+                Yii::$app->memcache->delete($model->name);
 				return $this->redirect(['view', 'id' => $model->id]);
 			}
         } else {

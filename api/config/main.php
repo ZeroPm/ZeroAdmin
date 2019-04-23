@@ -56,6 +56,8 @@ return [
                         'POST upuser' => 'upuser',
                         'GET getann' => 'getann',
                         'POST read' => 'read',
+                        'POST reads' => 'reads',
+                        'GET config' => 'config',
                     ]
                 ],
 				[
