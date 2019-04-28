@@ -1,5 +1,4 @@
 <?php
-
 // +----------------------------------------------------------------------
 // | WeChatDeveloper
 // +----------------------------------------------------------------------
@@ -11,13 +10,10 @@
 // +----------------------------------------------------------------------
 // | github开源项目：https://github.com/zoujingli/WeChatDeveloper
 // +----------------------------------------------------------------------
-
 namespace WeChat\Contracts;
-
 use WeChat\Exceptions\InvalidArgumentException;
 use WeChat\Exceptions\InvalidResponseException;
 use WeChat\Exceptions\LocalCacheException;
-
 /**
  * 网络请求支持
  * Class Tools
@@ -30,13 +26,21 @@ class Tools
      * @var null
      */
     public static $cache_path = null;
-
+    /**
+     * 缓存写入操作
+     * @var array
+     */
+    public static $cache_callable = [
+        'set' => null, // 写入缓存
+        'get' => null, // 获取缓存
+        'del' => null, // 删除缓存
+        'put' => null, // 写入文件
+    ];
     /**
      * 网络缓存
      * @var array
      */
     private static $cache_curl = [];
-
     /**
      * 产生随机字符串
      * @param int $length 指定字符长度
@@ -51,8 +55,6 @@ class Tools
         }
         return $str;
     }
-
-
     /**
      * 根据文件后缀获取文件类型
      * @param string|array $ext 文件后缀
@@ -68,7 +70,6 @@ class Tools
         }
         return join(',', array_unique($mine));
     }
-
     /**
      * 获取所有文件扩展的类型
      * @return array
@@ -85,7 +86,6 @@ class Tools
         }
         return $mines;
     }
-
     /**
      * 创建CURL文件对象
      * @param $filename
@@ -106,7 +106,6 @@ class Tools
         }
         return $filename;
     }
-
     /**
      * 数组转XML内容
      * @param array $data
@@ -116,7 +115,6 @@ class Tools
     {
         return "<xml>" . self::_arr2xml($data) . "</xml>";
     }
-
     /**
      * XML内容生成
      * @param array $data 数据
@@ -139,7 +137,6 @@ class Tools
         }
         return $content;
     }
-
     /**
      * 解析XML内容到数组
      * @param string $xml
@@ -150,9 +147,8 @@ class Tools
         $entity = libxml_disable_entity_loader(true);
         $data = (array)simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
         libxml_disable_entity_loader($entity);
-        return json_decode(self::arr2json($data), true);
+        return json_decode(json_encode($data), true);
     }
-
     /**
      * 数组转xml内容
      * @param array $data
@@ -160,11 +156,67 @@ class Tools
      */
     public static function arr2json($data)
     {
-        return preg_replace_callback('/\\\\u([0-9a-f]{4})/i', function ($matches) {
-            return mb_convert_encoding(pack("H*", $matches[1]), "UTF-8", "UCS-2BE");
-        }, ($jsonData = json_encode($data)) == '[]' ? '{}' : $jsonData);
+        $json = json_encode(self::buildEnEmojiData($data), JSON_UNESCAPED_UNICODE);
+        return $json === '[]' ? '{}' : $json;
     }
-
+    /**
+     * 数组对象Emoji编译处理
+     * @param array $data
+     * @return array
+     */
+    public static function buildEnEmojiData(array $data)
+    {
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $data[$key] = self::buildEnEmojiData($value);
+            } elseif (is_string($value)) {
+                $data[$key] = self::emojiEncode($value);
+            } else {
+                $data[$key] = $value;
+            }
+        }
+        return $data;
+    }
+    /**
+     * 数组对象Emoji反解析处理
+     * @param array $data
+     * @return array
+     */
+    public static function buildDeEmojiData(array $data)
+    {
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $data[$key] = self::buildDeEmojiData($value);
+            } elseif (is_string($value)) {
+                $data[$key] = self::emojiDecode($value);
+            } else {
+                $data[$key] = $value;
+            }
+        }
+        return $data;
+    }
+    /**
+     * Emoji原形转换为String
+     * @param string $content
+     * @return string
+     */
+    public static function emojiEncode($content)
+    {
+        return json_decode(preg_replace_callback("/(\\\u[ed][0-9a-f]{3})/i", function ($string) {
+            return addslashes($string[0]);
+        }, json_encode($content)));
+    }
+    /**
+     * Emoji字符串转换为原形
+     * @param string $content
+     * @return string
+     */
+    public static function emojiDecode($content)
+    {
+        return json_decode(preg_replace_callback('/\\\\\\\\/i', function () {
+            return '\\';
+        }, json_encode($content)));
+    }
     /**
      * 解析JSON内容到数组
      * @param string $json
@@ -182,7 +234,6 @@ class Tools
         }
         return $result;
     }
-
     /**
      * 以get访问模拟访问
      * @param string $url 访问URL
@@ -196,7 +247,6 @@ class Tools
         $options['query'] = $query;
         return self::doRequest('get', $url, $options);
     }
-
     /**
      * 以post访问模拟访问
      * @param string $url 访问URL
@@ -210,7 +260,6 @@ class Tools
         $options['data'] = $data;
         return self::doRequest('post', $url, $options);
     }
-
     /**
      * CURL模拟网络请求
      * @param string $method 请求方法
@@ -259,7 +308,6 @@ class Tools
         }
         return $content;
     }
-
     /**
      * POST数据过滤处理
      * @param array $data 需要处理的数据
@@ -274,8 +322,9 @@ class Tools
             $build = false;
         } elseif (is_object($value) && isset($value->datatype) && $value->datatype === 'MY_CURL_FILE') {
             $build = false;
-            $data[$key] = ($myCurlFile = new MyCurlFile((array)$value))->get();
-            array_push(self::$cache_curl, $myCurlFile->tempname);
+            $mycurl = new MyCurlFile((array)$value);
+            $data[$key] = $mycurl->get();
+            array_push(self::$cache_curl, $mycurl->tempname);
         } elseif (is_string($value) && class_exists('CURLFile', false) && stripos($value, '@') === 0) {
             if (($filename = realpath(trim($value, '@'))) && file_exists($filename)) {
                 $build = false;
@@ -284,7 +333,6 @@ class Tools
         }
         return $build ? http_build_query($data) : $data;
     }
-
     /**
      * 写入文件
      * @param string $name 文件名称
@@ -294,13 +342,15 @@ class Tools
      */
     public static function pushFile($name, $content)
     {
+        if (is_callable(self::$cache_callable['put'])) {
+            return call_user_func_array(self::$cache_callable['put'], func_get_args());
+        }
         $file = self::_getCacheName($name);
         if (!file_put_contents($file, $content)) {
             throw new LocalCacheException('local file write error.', '0');
         }
         return $file;
     }
-
     /**
      * 缓存配置与存储
      * @param string $name 缓存名称
@@ -311,13 +361,16 @@ class Tools
      */
     public static function setCache($name, $value = '', $expired = 3600)
     {
+        if (is_callable(self::$cache_callable['set'])) {
+            return call_user_func_array(self::$cache_callable['set'], func_get_args());
+        }
         $file = self::_getCacheName($name);
-        if (!file_put_contents($file, serialize(['name' => $name, 'value' => $value, 'expired' => time() + intval($expired)]))) {
+        $data = ['name' => $name, 'value' => $value, 'expired' => time() + intval($expired)];
+        if (!file_put_contents($file, serialize($data))) {
             throw new LocalCacheException('local cache error.', '0');
         }
         return $file;
     }
-
     /**
      * 获取缓存内容
      * @param string $name 缓存名称
@@ -325,6 +378,9 @@ class Tools
      */
     public static function getCache($name)
     {
+        if (is_callable(self::$cache_callable['get'])) {
+            return call_user_func_array(self::$cache_callable['get'], func_get_args());
+        }
         $file = self::_getCacheName($name);
         if (file_exists($file) && ($content = file_get_contents($file))) {
             $data = unserialize($content);
@@ -335,7 +391,6 @@ class Tools
         }
         return null;
     }
-
     /**
      * 移除缓存文件
      * @param string $name 缓存名称
@@ -343,10 +398,12 @@ class Tools
      */
     public static function delCache($name)
     {
+        if (is_callable(self::$cache_callable['del'])) {
+            return call_user_func_array(self::$cache_callable['del'], func_get_args());
+        }
         $file = self::_getCacheName($name);
         return file_exists($file) ? unlink($file) : true;
     }
-
     /**
      * 应用缓存目录
      * @param string $name

@@ -31,41 +31,28 @@ class LoginCuser extends Model
 
 
     //小程序用户处理
-    public function getUser($data)
+    public function getUser($data,$parent_uuid)
     {
-    	if(Cuser::findByOpenidm($this->openid)){
-    		$model = Cuser::findByOpenidm($this->openid);
+        $model = Cuser::findByOpenidm($this->openid);
+    	if($model){
     		$model->updated_at = time();
 			$model->session_key = $this->session_key;
-            $model->nickname = array_key_exists("nickName",$data) ? $data['nickName'] : '';
-            $model->gender = array_key_exists("gender",$data) ? $data['gender'] : '';
-            $model->avatarurl = array_key_exists("avatarUrl",$data) ? $data['avatarUrl']:'';
 			if(!$model->union_id ){
-                if(array_key_exists("unionid",$data)){
-                    //小程序登录时的unionid绑定
-                    $model->union_id = $data['unionid'];
-                }else if(array_key_exists("unionId",$data)){
-                    //小程序解密后unionId绑定
-                    $model->union_id = $data['unionId'];
-                }
+                $model->union_id = array_key_exists("unionid",$data) ? $data['unionid']: '';
 			}
 			$model->isfollow = array_key_exists("unionid",$data) ? 1 : 0 ;
             $model->save();  
             return  $model;
     	}else{
     		$model = new Cuser();
-    		$model->mopenid = $data['openid'];
+    		$model->mopenid = $this->openid;
     		$model->session_key = $this->session_key;
-            $model->nickname = array_key_exists("nickName",$data) ? $data['nickName'] : '';
-            $model->gender = array_key_exists("gender",$data)?$data['gender'] : '';
-            $model->avatarurl = array_key_exists("avatarUrl",$data) ? $data['avatarUrl'] : '';
-            if(array_key_exists("unionid",$data)){
-                //小程序登录时的unionid绑定
-                $model->union_id = $data['unionid'];
-            }else if(array_key_exists("unionId",$data)){
-                //小程序解密后unionId绑定
-                $model->union_id = $data['unionId'];
-            }
+            //随缘，能成则成，不能成则算了
+            $model->parent_uuid = $parent_uuid ? $parent_uuid : '';
+            
+            //小程序登录时的unionid绑定
+            $model->union_id = array_key_exists("unionid",$data) ? $data['unionid']: '';
+            
     		$model->isfollow = array_key_exists("unionid",$data) ? 1 : 0 ;
     		$model->save();
     		return $model;
@@ -97,6 +84,34 @@ class LoginCuser extends Model
             return $model;
         }else{
             return false;
+        }
+    }
+
+    //小程序用户处理
+    public function getUsers($data)
+    {
+        $model = Cuser::findByOpenidm($this->openid);
+        if($model){
+            $model->updated_at = time();
+            $model->session_key = $this->session_key;
+            $model->nickname = array_key_exists("nickName",$data) ? $data['nickName'] : '';
+            $model->gender = array_key_exists("gender",$data) ? $data['gender'] : '';
+            $model->avatarurl = array_key_exists("avatarUrl",$data) ? $data['avatarUrl']:'';
+            if(!$model->union_id ){
+                $model->union_id = array_key_exists("unionId",$data) ? $data['unionId'] : '';
+            }
+            $model->save();  
+            return  $model;
+        }else{
+            $model = new Cuser();
+            $model->mopenid = $this->openid;
+            $model->session_key = $this->session_key;
+            $model->nickname = array_key_exists("nickName",$data) ? $data['nickName'] : '';
+            $model->gender = array_key_exists("gender",$data)?$data['gender'] : '';
+            $model->avatarurl = array_key_exists("avatarUrl",$data) ? $data['avatarUrl'] : '';
+            $model->union_id = array_key_exists("unionId",$data) ? $data['unionId'] : '';
+            $model->save();
+            return $model;
         }
     }
 

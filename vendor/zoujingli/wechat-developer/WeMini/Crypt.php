@@ -38,7 +38,7 @@ class Crypt extends BasicWeChat
     public function decode($iv, $sessionKey, $encryptedData)
     {
         require_once __DIR__ . DIRECTORY_SEPARATOR . 'crypt' . DIRECTORY_SEPARATOR . 'wxBizDataCrypt.php';
-        $pc = new \WXBizDataCrypt($this->config->get('appid'), $sessionKey);
+        $pc = new \WXBizDataCrypt($this->config->get('miniappid'), $sessionKey);
         $errCode = $pc->decryptData($encryptedData, $iv, $data);
         if ($errCode == 0) {
             return json_decode($data, true);
@@ -53,8 +53,8 @@ class Crypt extends BasicWeChat
      */
     public function session($code)
     {
-        $appid = $this->config->get('appid');
-        $secret = $this->config->get('appsecret');
+        $appid = $this->config->get('miniappid');
+        $secret = $this->config->get('miniappsecret');
         $url = "https://api.weixin.qq.com/sns/jscode2session?appid={$appid}&secret={$secret}&js_code={$code}&grant_type=authorization_code";
         return json_decode(Tools::get($url), true);
     }

@@ -42,7 +42,8 @@ return [
 					'controller' => ['v1/article'],
 					'pluralize'=>false,
 				],
-                                [
+                //微信小程序的api
+                [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => ['v1/wechat'],
                     'pluralize'=>false,
@@ -58,6 +59,18 @@ return [
                         'POST read' => 'read',
                         'POST reads' => 'reads',
                         'GET config' => 'config',
+                    ]
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['v1/wechats'],
+                    'pluralize'=>false,
+                    'extraPatterns' => [
+                        'GET receive' => 'receive',
+                        'POST receive' => 'receive',
+                        'POST qrcode' => 'qrcode',
+                        'GET menu' => 'menu',
+                        'GET userinfo' => 'userinfo',
                     ]
                 ],
 				[

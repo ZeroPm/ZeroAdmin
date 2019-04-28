@@ -39,6 +39,8 @@ class WechatController extends ActiveController
 	{
 		$data = Yii::$app->request->post();
 
+		//$data = $_POST['code'];
+
 		if($data){
 
 			$weminidata = Yii::$app->wechat->WeMiniCrypt()->session($data['code']);
@@ -53,7 +55,7 @@ class WechatController extends ActiveController
 
 				$model->setAttributes($weminidata);
 
-				$user = $model->getUser($weminidata);
+				$user = $model->getUser($weminidata,!empty($data['parent_uuid'])?$data['parent_uuid']:'');
 
 				$userdata = $model->getUserData($user->id);
 
@@ -102,7 +104,6 @@ class WechatController extends ActiveController
 			$province = $model->getProvince($mapApi->result->ad_info->province);
 
 			return ['code'=>200,"msg"=>'解析成功',"data"=>["province_id"=>$province->province_id,"name"=>$province->name]];
-			//return $mapApi->status ? ['code'=>$mapApi->status,"msg"=>$mapApi->message] : ['code'=>400,"msg"=>'暂时只支持中国的行政区',"data"=>$mapApi->result->address_component->nation];
 
 		}else{
 			return $mapApi->status ? ['code'=>$mapApi->status,"msg"=>$mapApi->message] : ['code'=>400,"msg"=>'暂时只支持中国的行政区',"data"=>$mapApi->result->address_component->nation];
@@ -158,7 +159,7 @@ class WechatController extends ActiveController
 
 			$model->setAttributes($decryptData);
 
-			$user = $model->getUser($decryptData);
+			$user = $model->getUsers($decryptData);
 
 			$userdata = $user->union_id;
 

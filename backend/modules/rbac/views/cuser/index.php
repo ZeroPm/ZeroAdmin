@@ -10,6 +10,9 @@ $this->registerJs($this->render('js/index.js'));
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\searchs\Cuser */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+
+//echo Yii::$app->wechat->config['token'];
+
 ?>
 <blockquote class="layui-elem-quote" style="font-size: 14px;">
 		    <?php  echo $this->render('_search', ['model' => $searchModel]); ?>

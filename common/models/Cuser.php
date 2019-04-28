@@ -100,4 +100,18 @@ class Cuser extends \yii\db\ActiveRecord
         return Cuser::findOne(['wopenid' => $openid]);
     }
 
+    //unionid查询
+    public static function findByUnionid($unionid)
+    {
+        //return Cuser::findOne(['union_id' => $unionid]);
+
+        return Cuser::find()->with(
+            ['operation'=>function($query){
+                $cond = ['type'=>2];
+                $query->andwhere($cond)->orderBy('created_at DESC');
+                }
+            ]
+        )->one();
+    }
+
 }

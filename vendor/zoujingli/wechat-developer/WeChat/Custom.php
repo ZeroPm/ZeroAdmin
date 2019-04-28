@@ -243,5 +243,13 @@ class Custom extends BasicWeChat
         return $this->httpPostForJson($url, ['speed' => $speed]);
     }
 
+    // 通过Openid获取拉取用户基本信息
+    public function userInfo($openid)
+    {
+        $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=ACCESS_TOKEN&openid={$openid}&lang=zh_CN";
+        $this->registerApi($url, __FUNCTION__, func_get_args());
+        return $this->httpGetForJson($url);
+    }
+
 
 }

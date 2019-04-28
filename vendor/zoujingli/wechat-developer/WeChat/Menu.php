@@ -63,7 +63,7 @@ class Menu extends BasicWeChat
         $this->registerApi($url, __FUNCTION__, func_get_args());
         return $this->httpPostForJson($url, $data);
     }
-
+    
     /**
      * 创建个性化菜单
      * @param array $data
