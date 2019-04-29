@@ -3,6 +3,8 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\web\NotFoundHttpException;
 
 /**
  * This is the model class for table "c_wuser".
@@ -30,6 +32,13 @@ class Wuser extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return 'c_wuser';
+    }
+
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
     }
 
     /**
@@ -66,11 +75,18 @@ class Wuser extends \yii\db\ActiveRecord
             'subscribe_scene' => '关注场景',
             'qr_scene' => '二维码场景',
             'qr_scene_str' => '二维码场景描述',
+            'created_at' => '创建时间',
+            'updated_at' => '最新更新时间',
         ];
     }
 
     public static function findByOpenid($openid)
     {
         return Wuser::findOne(['openid' => $openid]);
+    }
+
+    public static function findByUnionid($unionid)
+    {
+        return Wuser::findOne(['unionid' => $unionid]);
     }
 }

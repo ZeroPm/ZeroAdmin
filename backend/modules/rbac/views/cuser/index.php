@@ -42,6 +42,7 @@ $this->registerJs($this->render('js/index.js'));
 
             'mopenid',
             'union_id',
+            'wopenid',
             [
 				'attribute' => 'avatarurl',
 				'contentOptions' => ['style'=> 'text-align: center;'],

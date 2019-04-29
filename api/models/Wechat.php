@@ -10,7 +10,7 @@ use common\models\Cuser;
 class Wechat extends Model
 {
 
-    //公众号用户处理
+    //关注公众号用户处理
     // 1：绑定成功已订阅；5：绑定成功但未订阅；2：已绑定已订阅；6：已绑定但未订阅；3：小程序未订阅。
     public function getUser($openid)
     {
@@ -19,15 +19,21 @@ class Wechat extends Model
     	$userData =  $user ? $user : $this->createUser($openid);
 
     	if(is_object($userData)){
+    		$userData->subscribe = 1;
+    		$userData->save();
     		$miniUser = Cuser::findByUnionid($userData->unionid);
-    		if($miniUser){
+    		if(!empty($miniUser)){
 
     			if($miniUser->wopenid){
     				//提示简明，且代码少的情况下全部换成了3
     				//return $miniUser->operation ? 2 : 6;
+    				$miniUser->isfollow = $userData->subscribe;
+    				$miniUser->save();
     				return $miniUser->operation ? 2 : 3;
+
     			}else{
     				$miniUser->wopenid = $userData->openid;
+    				$miniUser->isfollow = $userData->subscribe;
     				if($miniUser->save()){
     					//提示简明，且代码少的情况下全部换成了3
 						//return $miniUser->operation ? 1 : 5;
@@ -70,6 +76,20 @@ class Wechat extends Model
     	}else{
     		return 602;
     	}
+    }
+
+    public function unsubScribe($openid)
+    {
+    	$user = Wuser::findByOpenid($openid);
+    	if($user){
+	        $user->subscribe = 0;
+	        $user->save();
+        }
+        $miniUser = Cuser::findByUnionid($user->unionid);
+        if($miniUser){
+            $miniUser->isfollow = 0;
+            $miniUser->save();
+        }
     }
 
 }

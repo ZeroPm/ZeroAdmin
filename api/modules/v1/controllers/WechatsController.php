@@ -49,31 +49,56 @@ class WechatsController extends ActiveController
                     $data = $wechat->getUser($model->getOpenid());
                     switch ($data){
                         case 1:
-                            $content = "感谢关注.小白提示：订阅自考信息成功，届时会在对应时间通知各位.".$data;
+                            $content = "感谢关注~小白提示：订阅自考信息成功，届时会在对应时间通知各位.".$data;
                         break;
                         case 2:
-                            $content = "感谢关注.小白提示：你已经订阅成功~".$data;
+                            $content = "感谢关注~小白提示：你已经订阅成功~".$data;
                         break;
                         case 3:
-                            $content = '小白暂未发现你有订阅自考信息.进入<a data-miniprogram-appid="wx8421f195ef6f0716" data-miniprogram-path="pages/userCenter/userCenter">小程序订阅~</a>.'.$data;
+                            $content = '感谢关注~小白暂未发现你有订阅自考信息.进入<a data-miniprogram-appid="wx8421f195ef6f0716" data-miniprogram-path="pages/userCenter/userCenter">小程序订阅~</a>.'.$data;
                         break;
                         default:
-                            $content = '感谢关注.小白提示：订阅自考信息失败，Errorcode:'.$data.'.';
+                            $content = '感谢关注~小白提示：订阅自考信息失败，请重新订阅绑定~Errorcode:'.$data.'.';
                     }
+                    $model->text($content);
                     break;
                 case "unsubscribe":
-                    $content = "取关了".$formContent;
+                    $wechat->unsubScribe($model->getOpenid());
+                    echo 'success';
+                    exit();
                     break;
                 case "CLICK":
                     $key_value = $model->getReceive('EventKey');
-                    $content = $formContent.$key_value;
+                    switch ($key_value) {
+                        case 'SUB_FOLLOW':
+                            $data = $wechat->getUser($model->getOpenid());
+                            switch ($data){
+                                case 1:
+                                    $content = "小白提示：订阅自考信息成功，届时会在对应时间通知各位.".$data;
+                                break;
+                                case 2:
+                                    $content = "小白提示：你已经订阅成功~".$data;
+                                break;
+                                case 3:
+                                    $content = '小白暂未发现你有订阅自考信息.进入<a data-miniprogram-appid="wx8421f195ef6f0716" data-miniprogram-path="pages/userCenter/userCenter">小程序订阅~</a>.'.$data;
+                                break;
+                                default:
+                                    $content = '小白提示：订阅自考信息失败，请重新订阅绑定~Errorcode:'.$data.'.';
+                            }
+                            $model->text($content);
+                            break;
+                        
+                        case 'CONTACT_XIAOBAI':
+                            $model->image('0-q45ex5MHR_RXJ4lKXIE-FYZiLj5l8vMshZxfsxWQY');
+                            break;
+                    }
+                    //$content = $formContent.$key_value;
                     break;
                 default:
                     echo 'success';
                     exit();
             }
-            $model->text($content);
-
+            
             $model->reply();
         }else if($_SERVER['REQUEST_METHOD'] == "GET"){
             $model->reply();
@@ -102,24 +127,26 @@ class WechatsController extends ActiveController
     public function actionMenu()
     {
 
-        $data = array('button'=>array(
-            array(
-                'name'=>'订阅绑定',
-                'type'=>'click',
-                'key'=> 'SUB_FOLLOW',
-            ),
-            array(
-                'name'=>'联系小白',
-                'type'=>'click',
-                'key'=> 'CONTACT_XIAOBAI',
-            ),
-        ));
+        // $data = array('button'=>array(
+        //     array(
+        //         'name'=>'订阅绑定',
+        //         'type'=>'click',
+        //         'key'=> 'SUB_FOLLOW',
+        //     ),
+        //     array(
+        //         'name'=>'联系小白',
+        //         'type'=>'click',
+        //         'key'=> 'CONTACT_XIAOBAI',
+        //     ),
+        // ));
 
-        //$data = json_encode($data);
+        // //$data = json_encode($data);
 
-        $a = Yii::$app->wechat->WeChatMenu()->create($data);
+        // $a = Yii::$app->wechat->WeChatMenu()->create($data);
 
-        return $a;
+        // return $a;
+        $data = Yii::$app->wechat->WeChatMedia()->batchGetMaterial();
+        return $data;
     }
 
     public function actionUserinfo()

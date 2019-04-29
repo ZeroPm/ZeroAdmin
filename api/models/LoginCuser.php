@@ -5,6 +5,7 @@ use Yii;
 use yii\base\Model;
 use common\models\Cuser;
 use common\models\Operation;
+use common\models\Wuser;
 
 /**
  * Login form
@@ -30,16 +31,21 @@ class LoginCuser extends Model
     }
 
 
-    //小程序用户处理
+    //小程序用户登录
     public function getUser($data,$parent_uuid)
     {
         $model = Cuser::findByOpenidm($this->openid);
     	if($model){
     		$model->updated_at = time();
 			$model->session_key = $this->session_key;
-			if(!$model->union_id ){
-                $model->union_id = array_key_exists("unionid",$data) ? $data['unionid']: '';
+			if(!$model->union_id){
+                $model->union_id = array_key_exists("unionid",$data) ? $data['unionid'] : '';
+                
 			}
+            if(array_key_exists("unionid",$data) && !$model->wopenid){
+                $wechatUser = Wuser::findByUnionid($data['unionid']);
+                $model->wopenid = $wechatUser ? $wechatUser->openid : $this->fileError($data['unionid']);
+            }
 			$model->isfollow = array_key_exists("unionid",$data) ? 1 : 0 ;
             $model->save();  
             return  $model;
@@ -51,7 +57,11 @@ class LoginCuser extends Model
             $model->parent_uuid = $parent_uuid ? $parent_uuid : '';
             
             //小程序登录时的unionid绑定
-            $model->union_id = array_key_exists("unionid",$data) ? $data['unionid']: '';
+            if(array_key_exists("unionid",$data)){
+                $model->union_id =  $data['unionid'];
+                $wechatUser = Wuser::findByUnionid($data['unionid']);
+                $model->wopenid = $wechatUser ? $wechatUser->openid : $this->fileError($data['unionid']);
+            }
             
     		$model->isfollow = array_key_exists("unionid",$data) ? 1 : 0 ;
     		$model->save();
@@ -87,7 +97,7 @@ class LoginCuser extends Model
         }
     }
 
-    //小程序用户处理
+    //小程序用户授权信息解密
     public function getUsers($data)
     {
         $model = Cuser::findByOpenidm($this->openid);
@@ -115,4 +125,13 @@ class LoginCuser extends Model
         }
     }
 
+    public function fileError($unionid)
+    {
+        $this->file_force_contents('wechatError.txt',date("Y-m-d H:i:s",time()).",".$unionid."\r\n");
+    }
+
+    public function file_force_contents($dir,$contents)
+    {
+        file_put_contents($dir, $contents, FILE_APPEND|LOCK_EX);
+    }
 }
