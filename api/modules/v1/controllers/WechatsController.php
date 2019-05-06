@@ -31,7 +31,7 @@ class WechatsController extends ActiveController
         'class' => 'yii\rest\Serializer',
         'collectionEnvelope' => 'items',
     ];
-
+    //接收微信信息自动回复
     public function actionReceive()
     {
 
@@ -49,13 +49,13 @@ class WechatsController extends ActiveController
                     $data = $wechat->getUser($model->getOpenid());
                     switch ($data){
                         case 1:
-                            $content = "感谢关注~小白提示：订阅自考信息成功，届时会在对应时间通知各位.".$data;
+                            $content = "感谢关注~小白提示：订阅自考信息成功，届时会在对应时间通知各位.";
                         break;
                         case 2:
-                            $content = "感谢关注~小白提示：你已经订阅成功~".$data;
+                            $content = "感谢关注~小白提示：你已经订阅成功~";
                         break;
                         case 3:
-                            $content = '感谢关注~小白暂未发现你有订阅自考信息.进入<a data-miniprogram-appid="wx8421f195ef6f0716" data-miniprogram-path="pages/userCenter/userCenter">小程序订阅~</a>.'.$data;
+                            $content = '感谢关注~小白暂未发现你有订阅自考信息.进入<a data-miniprogram-appid="wx8421f195ef6f0716" data-miniprogram-path="pages/userCenter/userCenter">小程序订阅~</a>.';
                         break;
                         default:
                             $content = '感谢关注~小白提示：订阅自考信息失败，请重新订阅绑定~Errorcode:'.$data.'.';
@@ -74,13 +74,13 @@ class WechatsController extends ActiveController
                             $data = $wechat->getUser($model->getOpenid());
                             switch ($data){
                                 case 1:
-                                    $content = "小白提示：订阅自考信息成功，届时会在对应时间通知各位.".$data;
+                                    $content = "小白提示：订阅自考信息成功，届时会在对应时间通知各位.";
                                 break;
                                 case 2:
-                                    $content = "小白提示：你已经订阅成功~".$data;
+                                    $content = "小白提示：你已经订阅成功~";
                                 break;
                                 case 3:
-                                    $content = '小白暂未发现你有订阅自考信息.进入<a data-miniprogram-appid="wx8421f195ef6f0716" data-miniprogram-path="pages/userCenter/userCenter">小程序订阅~</a>.'.$data;
+                                    $content = '小白暂未发现你有订阅自考信息.进入<a data-miniprogram-appid="wx8421f195ef6f0716" data-miniprogram-path="pages/userCenter/userCenter">小程序订阅~</a>.';
                                 break;
                                 default:
                                     $content = '小白提示：订阅自考信息失败，请重新订阅绑定~Errorcode:'.$data.'.';
@@ -117,9 +117,9 @@ class WechatsController extends ActiveController
         //$token = Yii::$app->wechat->WeChatQrcode()->getAccessToken();
 
 
-        $code = Yii::$app->wechat->WeChatQrcode()->create(1);
+        //$code = Yii::$app->wechat->WeChatQrcode()->create(1);
 
-        return ['code'=>$code,"msg"=>'成功'];
+        //return ['code'=>$code,"msg"=>'成功'];
         //return Yii::$app->wechat->WeChatQrcode()->url();
     }
 
@@ -145,8 +145,8 @@ class WechatsController extends ActiveController
         // $a = Yii::$app->wechat->WeChatMenu()->create($data);
 
         // return $a;
-        $data = Yii::$app->wechat->WeChatMedia()->batchGetMaterial();
-        return $data;
+        //$data = Yii::$app->wechat->WeChatMedia()->batchGetMaterial();
+        //return $data;
     }
 
     public function actionUserinfo()

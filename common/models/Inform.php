@@ -5,6 +5,8 @@ namespace common\models;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\web\NotFoundHttpException;
+use common\models\Content;
+use common\models\Province;
 
 /**
  * This is the model class for table "b_inform".
@@ -38,13 +40,23 @@ class Inform extends \yii\db\ActiveRecord
         ];
     }
 
+
+    public function getContent()
+    {
+        return $this->hasOne(Content::className(), ['id'=>'content_id']);
+    }
+
+    public function getProvince()
+    {
+        return $this->hasOne(Province::className(), ['province_id'=>'province_id'])->via('content');
+    }
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['content_id', 'star_time', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['content_id', 'star_time', 'status', 'created_at', 'updated_at','processed','processed_total'], 'integer'],
             [['title', 'inform_doc','star_time'], 'required'],
             [['title'], 'string', 'max' => 255],
             [['inform_doc'], 'string', 'max' => 2048],
@@ -66,6 +78,8 @@ class Inform extends \yii\db\ActiveRecord
             'status' => '状态',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
+            'processed' => '处理状态',
+            'processed_total' => '通知用户总数',
         ];
     }
 }

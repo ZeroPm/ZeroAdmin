@@ -73,6 +73,14 @@ return [
                         'GET userinfo' => 'userinfo',
                     ]
                 ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['v1/template'],
+                    'pluralize'=>false,
+                    'extraPatterns' => [
+                        'GET send' => 'send',
+                    ]
+                ],
 				[
 					'class' => 'yii\rest\UrlRule',
 					'controller' => ['v1/user'],

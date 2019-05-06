@@ -6,38 +6,85 @@
       line-height:38px;
     }
     .layui-form-label{
-        width: 100px;
+      width: 100px;
     }
 </style>
 <script type="text/javascript">
-      function timestampToTime(timestamp) {
-        var date = new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
-        Y = date.getFullYear() + '-';
-        M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
-        D = date.getDate() + ' ';
-        h = date.getHours() + ':';
-        m = date.getMinutes() + ':';
-        s = date.getSeconds();
-        return Y+M+D+h+m+s;
-      }
+  function timestampToTime(timestamp) {
+      var date = new Date(timestamp*1000);//如果date为13位不需要乘1000
+      var Y = date.getFullYear() + '-';
+      var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+      var D = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate()) + ' ';
+      var h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
+      var m = (date.getMinutes() <10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
+      var s = (date.getSeconds() <10 ? '0' + date.getSeconds() : date.getSeconds());
+      return Y+M+D+h+m+s;
 
-      function linkType(num){
-        //console.log(num);
-        switch(num){
-          case '1':
-          return '自考公告';
-          break;
-          case '2':
-          return '公众号文章';
-          break;
-        }
-      }
+        }
+
+  function linkType(num){
+    //console.log(num);
+    switch(num){
+      case '1':
+      return '自考公告';
+      break;
+      case '2':
+      return '公众号文章';
+      break;
+    }
+  }
+
+  // 获取当前时间戳(以s为单位)
+  var timestamp = Date.parse(new Date());
+  timestamp = timestamp / 1000;
+  //当前时间戳为：1403149534
+  console.log("当前时间戳为：" + timestamp);
+  console.log("当前时间：" + timestampToTime(timestamp));
+  var stringTimeNow = timestampToTime(timestamp);
+
+  //日期转换成时间戳
+  var stringTimeEnd = stringTimeNow.substring(0,11)+"22:30:00";
+  var timestampEnd = Date.parse(new Date(stringTimeEnd));
+  timestampEnd = timestampEnd / 1000;
+
+  var stringTimeStart = stringTimeNow.substring(0,11)+"00:00:00";
+  var timestampStart = Date.parse(new Date(stringTimeStart));
+  timestampStart = timestampStart / 1000;
+
+  console.log(stringTimeStart + "当天开始的时间戳为：" + timestampStart);
+
+  console.log(stringTimeEnd + "当天定时任务终止的时间戳为：" + timestampEnd);
+  //通知信息边框处理
+  function informStatus(processed,star_time){
+    if(processed==2){
+      return "content-success";
+    }else if(processed==0&&timestamp-star_time>7200&&timestamp>star_time){
+      return "content-fail";
+    }else if(processed==1){
+      return "content-warning";
+    }else if(timestamp<star_time){
+      return "content";
+    }else if(processed==0&&timestamp-star_time<7200&&timestamp>star_time){
+      return "content";
+    }
+  }
+
+  function informTime(star_time){
+    if(timestampStart < star_time && star_time < timestampEnd){
+
+      return "layui-bg-orange";
+    }else{
+
+      return "";
+    }
+  }
 </script>
 <?php
 use yii\widgets\DetailView;
 use backend\assets\LayuiAsset;
 use yii\helpers\Html;
-
+//print_r($isubData['total']);
+//print_r(Yii::$app->memcache->get('isubData'.$model->province_id));
 LayuiAsset::register($this);
 $this->registerJs($this->render('js/view.js'));
 $this->registerCss($this->render('css/view.css'));
@@ -70,6 +117,8 @@ $this->registerCss($this->render('css/view.css'));
 
     <blockquote class="layui-elem-quote layui-quote-nm">
     省份基础资料
+    <!-- 基础资料tip提示 -->
+    <span class="icon-about icon-about-title"><i class="layui-icon layui-icon-tips"></i></span>
     </blockquote>
     <!-- 基础资料 -->
     <div class="layui-row layui-fluid" style="margin-bottom: 10px; ">
@@ -93,7 +142,11 @@ $this->registerCss($this->render('css/view.css'));
             </div>
         </div>
         <div class="layui-col-md3">
-            <div class="grid-basis">各项数据分析</div>
+          <div style="line-height:25px;">
+            <li>订阅总人数：<?= $isubData['total']; ?></li>
+            <li>未报名：<?= $isubData['un_sign']; ?></li>
+            <li>已报名：<?= $isubData['is_sign']; ?></li>
+          </div>
         </div>
     </div>
 
@@ -102,15 +155,21 @@ $this->registerCss($this->render('css/view.css'));
     <!-- 待处理及收录时间的容器 -->
     <span class="an-total" id="uncount">
     </span>
+      <!-- 公告tip提示 -->
+      <span class="manual"><a href="#">公告整理手册</a></span>
+      <span class="icon-about icon-about-ann"><i class="layui-icon layui-icon-tips"></i></span>
     </blockquote>
     <!-- 公告 -->
     <table id="ancontent" lay-filter="ancontent"></table>
     
     <blockquote class="layui-elem-quote layui-quote-nm">
     内容及通知
+      <!-- 内容tip提示 -->
+      <span class="icon-about icon-about-con"><i class="layui-icon layui-icon-tips"></i></span>
+
     </blockquote>
     <!-- 内容及通知 -->
-    <div style="text-align:center;" class="layui-hide content-loading"><i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i>加载中</div>
+    <div style="text-align:center;" class="layui-hide content-loading"><i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i>加载中...</div>
     <div id="content-table">
     <script type="text/html" id='contentTpl'>
       {{# if(d.length!=0){ }}
@@ -183,11 +242,14 @@ $this->registerCss($this->render('css/view.css'));
             <div class="layui-row layui-col-space10 grid-content">
               {{# var inform =d[key]['inform']; Object.keys(inform).forEach(function(key){ }}
                 <div class="layui-col-md3" >
-                        <div class="content grid-content">
+                        <div class="{{ informStatus(inform[key]['processed'],inform[key]['star_time']) }} grid-content">
+                          <div class="content-text">
+                            <label style="width: 80px;">ID：</label>{{ inform[key]['id'] }}
+                          </div>
                           <div class="content-text">
                             <label style="width: 80px;">标题：</label>{{ inform[key]['title'] }}
                           </div>
-                          <div class="content-text">
+                          <div class="content-text {{ informTime(inform[key]['star_time']) }}">
                             <label style="width: 80px;">通知时间：</label>{{ timestampToTime(inform[key]['star_time']) }}
                           </div>
                           {{# var keywords = inform[key]['inform_doc']; var keyword = keywords.split(";"); }}
@@ -212,9 +274,16 @@ $this->registerCss($this->render('css/view.css'));
                           <div class="content-text" style="font-size: 12px;color: #d2d2d2">
                             <label style="width: 80px;">更新时间：</label>{{ timestampToTime(inform[key]['updated_at']) }}
                           </div>
-                          <a class="layui-btn layui-inform-update" lay-submit lay-filter="formDemo" href="<?= yii\helpers\Url::to(['inform/update']); ?>?id={{ inform[key]['id'] }}">编辑</a>
-                          <a class="layui-btn" lay-submit lay-filter="formDemo">通知测试</a>
-                          <a class="layui-btn layui-btn-sm layui-btn-primary layui-inform-delete" href="<?= yii\helpers\Url::to(['inform/delete']); ?>?id={{ inform[key]['id'] }}" lay-filter="formDemo"><i class="layui-icon">&#xe640;</i></a>
+                          {{# if(inform[key]['processed']==0){ }}
+                          <button class="layui-btn layui-inform-update" lay-submit lay-filter="formDemo" href="<?= yii\helpers\Url::to(['inform/update']); ?>?id={{ inform[key]['id'] }}">编辑</button>
+                          {{# } if(inform[key]['processed']==1){ }}
+                          <button class="layui-btn layui-btn-disabled"  disabled="disabled" lay-filter="formDemo"><i data="{{ inform[key]['processed_total'] }}" class="layui-icon layui-icon-log">发送中</i></button>
+                          {{# } if(inform[key]['processed']==2){ }}
+                          <button class="layui-btn layui-btn-disabled"  disabled="disabled" lay-filter="formDemo"><i data="{{ inform[key]['processed_total'] }}" class="layui-icon layui-icon-log">已发送</i></button>
+                          {{# } }}
+                          <button class="layui-btn layui-inform-send" lay-filter="formDemo" data="{{ inform[key]['inform_doc'] }}" href="<?= yii\helpers\Url::to(['inform/send']); ?>">通知测试</button>
+                          <button class="layui-btn layui-btn-sm layui-btn-primary layui-inform-delete" href="<?= yii\helpers\Url::to(['inform/delete']); ?>?id={{ inform[key]['id'] }}" lay-filter="formDemo"><i class="layui-icon">&#xe640;</i></button>
+
                       </div>
               </div>
               {{# }); }}

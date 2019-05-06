@@ -6,7 +6,7 @@
 }
 
 .an-total{
-	font-size: 14px;
+	font-size: 16px;
 	margin-left: 10px;
 	color: #666;
 }
@@ -20,13 +20,28 @@
 	margin-bottom: 10px;
 }
 
+.content-fail{
+	border: 1px solid  red;
+	margin-bottom: 10px;
+}
+
+.content-success{
+	border: 1px solid  #009688;
+	margin-bottom: 10px;
+}
+
+.content-warning{
+	border: 1px solid  #FFB800;
+	margin-bottom: 10px;
+}
+
 .info-content{
 	margin: 10px;
 }
 
 .add-info{
 	border: 1px solid  #e6e6e6;
-	line-height:444px;
+	line-height:487px;
 	color: #666;
 	text-align:center;
 	cursor:pointer
@@ -39,3 +54,10 @@
 	cursor:pointer
 }
 
+.icon-about{
+	color: #009688;
+}
+
+.manual{
+	font-size: 16px;
+}

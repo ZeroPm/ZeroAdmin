@@ -123,7 +123,9 @@ class WechatController extends ActiveController
 
 			$operation = $model->addOperation($userdata->id,$data['type'],$data['province_id'],$data['isub']);
 
-			if($operation){
+			$isUpdateUser = $data['type']==2?$model->updateUserSub($userdata,$data['province_id'],$data['isub']):true;
+
+			if($operation&&$isUpdateUser){
 				$operations['province_id'] = $operation->province_id;
 				$operations['type'] = $operation->type;
 				$operations['created_at'] = $operation->created_at;
@@ -195,17 +197,25 @@ class WechatController extends ActiveController
 		
 		$items = $model->getAnn($province_id,$openid,10);
 
+		$unRead = 0;
+
         foreach ($items['item'] as $key => $value) {
 
             if($items['item'][$key]['created_at']>=$updated_at){
-            	
-            	$items['item'][$key]['isread'] ? $items['item'][$key]['Isread'] = 1 : $items['item'][$key]['Isread'] = 0;
+
+            	if($items['item'][$key]['isread']){
+
+            		$items['item'][$key]['Isread'] = 1; 
+            	}else{
+            		$items['item'][$key]['Isread'] = 0;
+            		$unRead = 1;
+            	}
             }else{
                 $items['item'][$key]['Isread'] = -1;
             }
         }
 
-		return ['code'=>200,"msg"=>'成功','data'=>$items['item'],'page'=>$items['pages']->page,'pageCount'=>$items['pages']->pageCount];
+		return ['code'=>200,"msg"=>'成功','data'=>$items['item'],'page'=>$items['pages']->page,'pageCount'=>$items['pages']->pageCount,'unRead'=>$unRead];
 	}
 
 	//单个点击公告已读
@@ -238,6 +248,24 @@ class WechatController extends ActiveController
 			return ['code'=>400,"msg"=>'未接收到数据'];
 		}
 	}
+
+	//获取是否有未读公告
+	// public  function actionReads()
+	// {
+	// 	$data = Yii::$app->request->post();
+	// 	if($data){
+	// 		$model = new GetProvince();
+	// 		$data = $model->readAll($data['id']);
+	// 		if($data){
+	// 			return ['code'=>200,"msg"=>'成功','data'=>$data];
+	// 		}else{
+	// 			return ['code'=>400,"msg"=>'已读操作失败'];
+	// 		}
+			
+	// 	}else{
+	// 		return ['code'=>400,"msg"=>'未接收到数据'];
+	// 	}
+	// }
 
 
 	//字典表中的通用配置信息

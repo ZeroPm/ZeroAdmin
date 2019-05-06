@@ -60,7 +60,7 @@ class Cuser extends \yii\db\ActiveRecord
     {
         return [
             [['session_key'], 'required'],
-            [['isfollow', 'created_at', 'updated_at', 'gender','isread'], 'integer'],
+            [['isfollow', 'created_at', 'updated_at', 'gender','isread','province_id','isub'], 'integer'],
             [['uuid', 'union_id', 'nickname', 'avatarurl', 'wopenid', 'mopenid', 'parent_uuid','session_key'], 'string', 'max' => 255],
         ];
     }
@@ -84,7 +84,9 @@ class Cuser extends \yii\db\ActiveRecord
             'mopenid' => '小程序openid',
             'parent_uuid' => 'Parent Uuid',
             'session_key' => 'Session_key',
-            'isread' => 'isread'
+            'isread' => 'isread',
+            'province_id' => '当前订阅省份',
+            'isub' => '当前订阅身份',
         ];
     }
 
@@ -112,6 +114,16 @@ class Cuser extends \yii\db\ActiveRecord
                 }
             ]
         )->one();
+    }
+
+    public static  function findIsubData($province_id)
+    {
+        $isubData = Yii::$app->memcache->get('isubData'.$province_id);
+        if(!$isubData){
+            $isubData = Cuser::find()->select('province_id,isub')->where(['province_id'=>$province_id])->asArray()->all();
+            Yii::$app->memcache->set('isubData'.$province_id,$isubData,300);
+        }
+        return $isubData;
     }
 
 }

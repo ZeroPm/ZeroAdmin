@@ -88,7 +88,7 @@ class Config extends \yii\db\ActiveRecord
 	public static function getConfig($name){
         //restful使用缓存非常的奇怪
 		$config = Yii::$app->memcache->get($name);
-        $config = false;
+        //$config = false;
 		if(!$config){
 			$config = self::findOne(['name'=>$name])->value;
 			Yii::$app->memcache->set($name,$config);

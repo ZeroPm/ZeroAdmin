@@ -11,6 +11,8 @@ use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\data\Pagination;
 use common\models\Announcement;
+use common\models\Cuser;
+
 
 /**
  * ProvinceController implements the CRUD actions for Province model.
@@ -59,8 +61,24 @@ class ProvinceController extends Controller
     public function actionView($id)
     {
         //print_r($this->findmodel($id));exit();
+        $model = $this->findModel($id);
+        $isubData = Cuser::findIsubData($model->province_id);
+        $isubData['total'] = count($isubData);
+        foreach ($isubData as $key => $value) {
+            if($value['isub']==1){
+                $isubData['un_sign'][$key] = $value;
+            }else if($value['isub']==2){
+                $isubData['is_sign'][$key] = $value;
+            }
+        }
+        
+        $isubData['is_sign'] = !empty($isubData['is_sign'])?count($isubData['is_sign']):0;
+        $isubData['un_sign'] = !empty($isubData['un_sign'])?count($isubData['un_sign']):0;
+        //Yii::$app->memcache->delete('isubData'.$model->province_id);
+        //print_r($isubData);exit();
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'isubData' => $isubData,
         ]);
     }
 
@@ -330,5 +348,7 @@ class ProvinceController extends Controller
             return json_encode(['code'=>400,"msg"=>"请选择数据"]);
         }
     }
+
+
 
 }

@@ -56,7 +56,7 @@ $keywords = explode(';',$model->inform_doc);
       <div class="layui-form-item">
         <label class="layui-form-label"><font color="red">*</font>keyword2</label>
         <div class="layui-input-block" >
-          <input type="text" name="keyword2" required  lay-verify="required" lay-verType="tips" placeholder="请输入内容" autocomplete="off" class="layui-input" value="<?= $model->inform_doc ? $keywords[3] : '' ; ?>">
+          <input type="text" name="keyword2" required  lay-verify="required" lay-verType="tips" placeholder="请输入内容" autocomplete="off" class="layui-input" value="<?= $model->inform_doc ? $keywords[2] : '' ; ?>">
         </div>
         <!-- <div><a class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe640;</i></a></div> -->
       </div>

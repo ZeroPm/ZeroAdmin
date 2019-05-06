@@ -23,7 +23,7 @@ LayuiAsset::addCss($this, "@web/resources/css/login.css");
 </head>
 <body>
 	<?php $this->beginBody() ?>
-	<div class="login_background" style="background: url(<?=Yii::getAlias("@web/resources/images/login.jpg")?>) no-repeat center center;"></div>
+	<div class="login_background" style="background:#f6f6f6;"></div>
 	<div class="login">
 		<?= $content ?>
 	</div>

@@ -402,6 +402,85 @@ layui.config({
         return false;
 	});
 
+	//基础资料tip展示
+	$("body").on("mouseenter",".icon-about-title",function(e){
+		var that = this;
+		//小tips
+		layer.tips('1.本栏目最后的数据统计有缓存，缓存时间在5分钟。',that, {
+		  tips: [1, '#009688'],
+		  time: 0,
+		  area: ['400px',]
+		});
+	});
+
+	//公告tip展示
+	$("body").on("mouseenter",".icon-about-ann",function(e){
+		var that = this;
+		//小tips
+		layer.tips('1.公告添加后，状态为未处理，此时公告不会在小程序上展示。</br>2.使用批量处理后的公告才会在小程序上展示。</br>3.删除公告后，你和小程序都不展示此公告。</br>4.日常公告处理要求。在出现新的未处理公告后，请点击公告链接进入对应内容页，再根据公告整理手册进行内容整理，整理完成后方可对公告进行批量处理，让小程序用户查看。',that, {
+		  tips: [1, '#009688'],
+		  time: 0,
+		  area: ['400px',]
+		});
+	});
+
+	//公告tip隐藏
+	$("body").on("mouseleave",".icon-about-ann,.icon-about-con,.icon-about-title,.layui-icon-log",function(){
+		layer.closeAll('tips');
+	});
+
+	//内容tip展示
+	$("body").on("mouseenter",".icon-about-con",function(){
+		var that = this;
+		layer.tips('1.内容开启且省份亦开启的条件下，小程序用户才能看到且每个内容下挂载的通知才能有效的通知用户。</br>2.当内容只有标题和链接时，小程序用户看到的样式如下：<img src="http://47.99.136.102/qrcode/content_example.png"></br>3.通知创建好后，请进行通知测试，以免出现通知内容错误或通知功能BUG。如需自己能接收通知测试内容请联系管理员。</br>4.内容的整理请根据公告处理手册执行。</br>5.定时任务每天只会对当天需要通知的消息进行通知，且最晚通知时间不能超过晚上10点。</br>6.定时任务每天10:05启动，每2小时执行一次，每天最晚的一次是22:05分。</br>7.通知处理成功的边框为绿色，正在通知的为橙色，失败或者异常的为红色（通知时间后2小时还未完成通知的），后续等待通知为灰色。</br>8.当天需要通知的信息，在通知时间栏会以橙色标记。', that, {
+		  tips: [1, '#009688'],
+		  time: 0,
+		  area: ['400px',]
+		});
+	});
+
+	//已发送通知数据展示
+	$("body").on("mouseenter",".layui-icon-log",function(){
+		var that = this;
+		//console.log(123);
+		layer.tips('通知用户数：'+$(that).attr("data"), that, {
+		  tips: [1, '#009688'],
+		  time: 0,
+		  area: ['200px',]
+		});
+	});
+
+	//消息通知测试
+	$("body").on("click",".layui-inform-send",function(){  
+        var href = $(this).attr("href");
+        var data = $(this).attr("data");
+        var that = $(this);
+        that.addClass('layui-disabled');
+        that.attr("disabled","disabled");
+        that.text("发送中...")
+        //console.log();
+        setTimeout(function(){
+	        $.post(href,{data:data},function(data){     	
+        		console.log(data);
+                if(data.code===200){
+                    layer.msg(data.msg);
+                }else{
+                    layer.msg(data.msg);
+                }
+            },"json").fail(function(a,b,c){
+                if(a.status==403){
+                    layer.msg('没有权限');
+                }else{
+                    layer.msg('系统错误');
+                }
+            });
+            that.removeClass('layui-disabled');
+	        that.removeAttr("disabled");
+	       	that.text("通知测试")
+        },3000);
+        return false;
+	});
+
 	// //提交编辑的链接
 	// function updataLink(){
 	// 	form.on('submit(go)', function(data){

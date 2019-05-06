@@ -20,7 +20,7 @@ $fieldOptions2 = [
 ?>
 
 <div>
-	<h1>后台登录</h1>
+	<h1>万悟顺科技经营部后台登录</h1>
 </div>
 <div>
 	<?php $form = ActiveForm::begin(['id' => 'login-form','options'=>['class' => 'layui-form'], 'enableClientValidation' => false]); ?>
@@ -47,7 +47,7 @@ $fieldOptions2 = [
 		<div style="float: left;position: relative;margin-top: 5px;color: #999;padding-left: -8px;font-size: 12px;">
 			<span>记住密码</span>
 		</div>
-		<div style="position: absolute;right: 18px;bottom: 37px;">
+		<div style="position: absolute;right: 18px;bottom: 7px;">
 			<?= Html::a('忘记密码', ['/rbac/user/request-password-reset'], ['class' => 'layui-form-mid layui-word-aux',"style"=>'float:right;padding: 5px 0;']) ?>
 		</div>
 	</div>

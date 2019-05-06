@@ -127,7 +127,7 @@ class LoginCuser extends Model
 
     public function fileError($unionid)
     {
-        $this->file_force_contents('wechatError.txt',date("Y-m-d H:i:s",time()).",".$unionid."\r\n");
+        $this->file_force_contents('wechatError.txt',date("Y-m-d H:i:s",time()).",unionid:".$unionid."\r\n");
     }
 
     public function file_force_contents($dir,$contents)

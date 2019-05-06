@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\Content;
+use common\models\Config;
 
 /**
  * InformController implements the CRUD actions for Inform model.
@@ -213,5 +214,54 @@ class InformController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    //通知测试
+    public function actionSend()
+    {
+        $postData = Yii::$app->request->post();
+        if($postData){
+            $expData = explode(";",$postData['data']);
+            $wechatOpenid = explode(";",Config::getConfig('WECHAT_INFO'));
+            $countOpenid = count($wechatOpenid);
+            $data = array();
+
+            $data['template_id'] = "2T2quvQgVeYCUhlTffv6mn0t1gCrdzxRcf0M2c0AUUM";
+            $data['miniprogram'] = array(
+                'appid' => 'wx8421f195ef6f0716',
+                //'pagepath' => 'pages/userCenter/userCenter',
+            );
+            $data['data'] = array(
+                'first'=>array(
+                    'value'=>$expData[0]
+                ),
+                'keyword1'=>array(
+                    'value'=>$expData[1]
+                ),
+                'keyword2'=>array(
+                    'value'=>$expData[2]
+                ),
+                'keyword3'=>array(
+                    'value'=>$expData[3]
+                ),
+                'remark'=>array(
+                    'value'=>$expData[4]
+                ),
+            );
+            if($countOpenid>1){
+                foreach ($wechatOpenid as $value) {
+                    $data['touser'] = $value;
+                    Yii::$app->wechat->WeChatTemplate()->send($data);
+                }
+            }else{
+                $data['touser'] = $wechatOpenid[0];
+                //Yii::$app->wechat->WeChatTemplate()->send($data);
+            }
+            return json_encode(['code'=>200,"msg"=>'发送成功','data'=>$data]);
+            //$data['data'] = 
+        }else{
+            return json_encode(['code'=>400,"msg"=>'未接受到数据']);
+        }
+        
     }
 }

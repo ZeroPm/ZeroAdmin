@@ -137,4 +137,15 @@ class GetProvince extends Model
         }
     }
 
+    public function updateUserSub($user,$province_id,$isub)
+    {
+        $user->province_id = $province_id;
+        $user->isub = $isub;
+        if($user->save()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 }
