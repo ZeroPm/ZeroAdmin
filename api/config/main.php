@@ -42,7 +42,7 @@ return [
 					'controller' => ['v1/article'],
 					'pluralize'=>false,
 				],
-                //微信小程序的api
+                //微信小程序的API
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => ['v1/wechat'],
@@ -61,6 +61,7 @@ return [
                         'GET config' => 'config',
                     ]
                 ],
+                //微信公众号API
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => ['v1/wechats'],
@@ -70,9 +71,10 @@ return [
                         'POST receive' => 'receive',
                         'POST qrcode' => 'qrcode',
                         'GET menu' => 'menu',
-                        'GET userinfo' => 'userinfo',
+                        //'GET userinfo' => 'userinfo',
                     ]
                 ],
+                //公众号模板消息API
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => ['v1/template'],
@@ -81,6 +83,7 @@ return [
                         'GET send' => 'send',
                     ]
                 ],
+                //登录API模板获取access_token
 				[
 					'class' => 'yii\rest\UrlRule',
 					'controller' => ['v1/user'],

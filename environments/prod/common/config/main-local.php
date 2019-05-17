@@ -4,8 +4,8 @@ return [
         'db' => [
             'class' => 'yii\db\Connection',
             'dsn' => 'mysql:host=localhost;dbname=yiicms',
-            'username' => 'root',
-            'password' => 'huangchen2008',
+            'username' => 'xiaobai',
+            'password' => 'aHVhbmdjaGVuMjAxOA==',
             'charset' => 'utf8',
             'tablePrefix' => 't_',
         ],

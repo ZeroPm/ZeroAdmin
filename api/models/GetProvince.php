@@ -84,7 +84,7 @@ class GetProvince extends Model
     public function getItem()
     {
         $model = new Province();
-        return $model->find()->all();
+        return $model->find()->select('province_id,name')->all();
         //return 123;
     }
 
@@ -95,7 +95,7 @@ class GetProvince extends Model
         $model = new Announcement();
         $count = $model->find()->where(['province_id'=>$province_id,'status'=>1])->count();
         $items['pages'] = new Pagination(['totalCount' => $count,'pageSize'=>$limit]);
-        $items['item'] = $model->find()->select('id,province_id,title,link,status,date,created_at')->where(['province_id'=>$province_id,'status'=>1])->with(
+        $items['item'] = $model->find()->select('id,province_id,title,link,date,created_at')->where(['province_id'=>$province_id,'status'=>1])->with(
             ['isread'=>function($query){
                 $cond = ['openid'=>$this->openid,'isready'=>1];
                 $query->andwhere($cond);

@@ -74,9 +74,9 @@ $keywords = explode(';',$model->inform_doc);
         </div>
       </div> -->
       <div class="layui-form-item">
-        <label class="layui-form-label"><font color="red">*</font>remark</label>
+        <label class="layui-form-label">remark</label>
         <div class="layui-input-block">
-          <input type="text" name="remark" required  lay-verify="required" lay-verType="tips" placeholder="请输入备注" autocomplete="off" class="layui-input" value="<?= $model->inform_doc ? $keywords[4] : '' ; ?>">
+          <input type="text" name="remark"   lay-verType="tips" placeholder="请输入备注" autocomplete="off" class="layui-input" value="<?= $model->inform_doc ? $keywords[4] : '' ; ?>">
         </div>
       </div>
       <div class="layui-form-item">

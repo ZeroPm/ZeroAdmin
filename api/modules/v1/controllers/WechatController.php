@@ -87,9 +87,9 @@ class WechatController extends ActiveController
 			//$data['identity'] = [1,2,3];
 			$model = new GetProvince();
 			$model->setAttributes($data);
-			return ['code'=>200,"msg"=>'数据接收成功',"data"=>$model->getContent()];
+			return ['code'=>200,"msg"=>'成功',"data"=>$model->getContent()];
 		}else{
-			return ['code'=>400,"msg"=>"未接收到数据"];
+			return ['code'=>400,"msg"=>"未接收到参数"];
 		}
 	}
 
@@ -134,7 +134,7 @@ class WechatController extends ActiveController
 				$operations['updated_at'] = $operation->updated_at;
 				return ['code'=>200,"msg"=>'操作写入成功',"data"=>$operations];
 			}else{
-				return ['code'=>400,"msg"=>'操作写入失败'];
+				return ['code'=>400001,"msg"=>'操作写入失败'];
 			}
 		}else{
 			return ['code'=>400,"msg"=>'未接收到数据'];
@@ -181,9 +181,9 @@ class WechatController extends ActiveController
 			$model = new LoginCuser();
 
 			if($userdata = $model->update($data['openid'],$data['isfollow'],$data['isread'])){
-				return ['code'=>200,"msg"=>'成功','data'=>$userdata];
+				return ['code'=>200,"msg"=>'成功','isread'=>$userdata->isread,'isfollow'=>$userdata->isfollow];
 			}else{
-				return ['code'=>200,"msg"=>'成功','data'=>$data];
+				return ['code'=>400001,"msg"=>'数据写入失败'];
 			}
 		}else{
 			return ['code'=>400,"msg"=>'未接收到数据'];
@@ -224,7 +224,12 @@ class WechatController extends ActiveController
 		$data = Yii::$app->request->post();
 		if($data){
 			$model = new GetProvince();
-			return ['code'=>200,"msg"=>'成功','data'=>$model->read($data)];
+			$operation = $model->read($data);
+			if($operation){
+				return ['code'=>200,"msg"=>'成功','data'=>$operation->announcement_id];
+			}else{
+				return ['code'=>400001,"msg"=>'操作写入失败'];
+			}
 		}else{
 			return ['code'=>400,"msg"=>'未接收到数据'];
 		}
@@ -237,11 +242,11 @@ class WechatController extends ActiveController
 		$data = Yii::$app->request->post();
 		if($data){
 			$model = new GetProvince();
-			$data = $model->readAll($data['id']);
-			if($data){
-				return ['code'=>200,"msg"=>'成功','data'=>$data];
+			$operation = $model->readAll($data['id']);
+			if($operation){
+				return ['code'=>200,"msg"=>'成功','data'=>$operation->updated_at];
 			}else{
-				return ['code'=>400,"msg"=>'已读操作失败'];
+				return ['code'=>400001,"msg"=>'操作写入失败'];
 			}
 			
 		}else{
