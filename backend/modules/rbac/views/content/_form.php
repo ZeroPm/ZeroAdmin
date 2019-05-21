@@ -32,7 +32,7 @@ $this->registerJs($this->render('js/index.js'));
       <div class="layui-form-item">
         <label class="layui-form-label"><font color="red">*</font>排序</label>
         <div class="layui-input-block">
-          <input type="text" name="sort" required lay-verify="required|number" placeholder="请输入排序（越大越前）" lay-verType="tips" autocomplete="off" class="layui-input" value="<?= $model->sort; ?>">
+          <input type="text" name="sort" required lay-verify="required|number" maxlength="5" placeholder="请输入排序（越大越前）" lay-verType="tips" autocomplete="off" class="layui-input" value="<?= $model->sort; ?>">
         </div>
       </div>
       <div class="layui-form-item">

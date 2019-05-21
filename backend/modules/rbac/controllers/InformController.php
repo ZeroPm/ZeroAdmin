@@ -255,7 +255,7 @@ class InformController extends Controller
                 }
             }else{
                 $data['touser'] = $wechatOpenid[0];
-                //Yii::$app->wechat->WeChatTemplate()->send($data);
+                Yii::$app->wechat->WeChatTemplate()->send($data);
             }
             return json_encode(['code'=>200,"msg"=>'发送成功','data'=>$data]);
             //$data['data'] = 
