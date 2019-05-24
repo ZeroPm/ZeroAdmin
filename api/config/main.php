@@ -41,6 +41,9 @@ return [
 					'class' => 'yii\rest\UrlRule',
 					'controller' => ['v1/article'],
 					'pluralize'=>false,
+                    'extraPatterns' => [
+                        'POST addan' => 'addan',
+                    ]
 				],
                 //微信小程序的API
                 [

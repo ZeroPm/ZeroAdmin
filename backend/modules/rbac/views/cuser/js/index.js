@@ -56,7 +56,7 @@ layui.config({
         var href = $(this).attr("href");
         console.log(href);
         var index = layui.layer.open({
-            title : "查看文章",
+            title : "查看详情",
             type : 2,
             area: ['100%', '100%'], //宽高
             content : href,

@@ -6,7 +6,7 @@ return [
             'dsn' => 'mysql:host=localhost;dbname=yiicms',
             'username' => 'xiaobai',
             'password' => 'aHVhbmdjaGVuMjAxOA==',
-            'charset' => 'utf8',
+            'charset' => 'utf8mb4',
             'tablePrefix' => 't_',
         ],
         'mailer' => [
