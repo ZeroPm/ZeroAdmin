@@ -1,12 +1,13 @@
 layui.config({
 	base : "js/"
-}).use(['form','layer','jquery','table','laytpl','layedit'],function(){
+}).use(['form','layer','jquery','table','laytpl','layedit','element'],function(){
 	var form = layui.form,
 		table = layui.table,
 		layer = parent.layer === undefined ? layui.layer : parent.layer,
 		laytpl = layui.laytpl,
 		layedit = layui.layedit,
 		$ = layui.jquery;
+		// element = layui.element;
 
 	var province_id = $('#province_id').attr("value");
 	var getTpl = uncoutTpl.innerHTML
@@ -44,118 +45,184 @@ layui.config({
 	    }
 	    ,cols: [[ //表头
 	    	{type: 'checkbox', fixed: 'left',width:'4%'}
-	      	,{field: 'title', title: '标题', width:'80%', sort: true, fixed: 'left',templet:'#titleTpl'}
+	      	,{field: 'title', title: '标题', width:'40%', sort: true, fixed: 'left',templet:'#titleTpl'}
+	      	,{field: 'remark', title: '备注', width:'40%', sort: true, fixed: 'left'}
 	      	,{field: 'date', title: '发布时间', width:"15%", sort: true}
 	    ]]
   	});
 
-	  	//公告头工具栏事件
-	  	table.on('toolbar(ancontent)', function(obj){
-	  		var checkStatus = table.checkStatus(obj.config.id);
-	  		switch(obj.event){
-	  			case 'add-ann':
-	  			var index = layui.layer.open({
-	  				title : "添加公告",
-	  				type : 2,
-	                area: ['50%', '80%'], //宽高
-	                content : "<?= yii\helpers\Url::to(['createann']);?>?"+"<?= $_SERVER['QUERY_STRING'];?>",
-	                success : function(layero, index){
-						// layer.close(index);
-	     //            	//layer.msg('添加成功');
-	     //            	table.reload('ancontent', {
-	     //            		page: {
-						// 	curr: 1 //重新从第 1 页开始
-						// 	}
-						// });
-	                },
-	                end: function () {
-	                	table.reload('ancontent', {
-	                		page: {
-							curr: 1 //重新从第 1 页开始
-							}
-						});
-	                }                
-	            });	
-			      	//layer.msg('添加');
-			    break;
-			    case 'processed':
-			      	//layer.msg('批量处理');
-			      	var data = checkStatus.data;
-			      	var url = "<?= yii\helpers\Url::to(['processed']); ?>";
-			      	//console.log(data);
-			      	if(data.length!==0){
-			      		layer.confirm('确定处理选中的信息？',{icon:3, title:'提示信息'},function(index){
-			      			var index = layer.msg('处理中，请稍候',{icon: 16,time:false,shade:0.8});
-			      			setTimeout(function(){
-			      				$.post(url,{"keys":data},function(data){
-			      					if(data.code===200){
-			      						console.log(data);
-			      						layer.msg(data.msg);
-			      						layer.close(index);
-			      						setTimeout(function(){
-			      							table.reload('ancontent', {
-			      								page: {
-												curr: 1 //重新从第 1 页开始
-											}
-										});
-			      						},500);
-			      					}else{
-			      						layer.close(index);
-			      						layer.msg(data.msg);
-			      					}
-			      				},"json").fail(function(a,b,c){
-			      					if(a.status==403){
-			      						layer.msg('没有权限',{icon: 5});
-			      					}else{
-			      						layer.msg('系统错误',{icon: 5});
-			      					}
-			      				});
-			      			},800);
-			      		});
-			      	}else{
-			      		layer.msg("请选择需要处理的公告",{icon: 5});
-			      	}
-			    break;
-			    case 'delete-ann':
-			      	//layer.msg('删除');
-			      	var data = checkStatus.data;
-			      	console.log(data);
-			      	var url = "<?= yii\helpers\Url::to(['deleteann']); ?>";
-			      	if(data.length!==0){
-			      		layer.confirm('确定删除选中的信息？',{icon:3, title:'提示信息'},function(index){
-			      			var index = layer.msg('删除中，请稍候',{icon: 16,time:false,shade:0.8});
-			      			setTimeout(function(){
-			      				$.post(url,{"keys":data},function(data){
-			      					if(data.code===200){
-			      						console.log(data);
-			      						layer.msg(data.msg);
-			      						layer.close(index);
-			      						setTimeout(function(){
-			      							table.reload('ancontent', {
-			      								page: {
-												curr: 1 //重新从第 1 页开始
-											}
-										});
-			      						},500);
-			      					}else{
-			      						layer.close(index);
-			      						layer.msg(data.msg);
-			      					}
-			      				},"json").fail(function(a,b,c){
-			      					if(a.status==403){
-			      						layer.msg('没有权限',{icon: 5});
-			      					}else{
-			      						layer.msg('系统错误',{icon: 5});
-			      					}
-			      				});
-			      			},800);
-			      		});
-			      	}else{
-			      		layer.msg("请选择需要删除的公告",{icon: 5});
-			      	}
-			    break;
-			    };
-			  });
+  	//公告头工具栏事件
+  	table.on('toolbar(ancontent)', function(obj){
+  		var checkStatus = table.checkStatus(obj.config.id);
+  		switch(obj.event){
+  			case 'add-ann':
+  			var index = layui.layer.open({
+  				title : "添加公告",
+  				type : 2,
+                area: ['50%', '80%'], //宽高
+                content : "<?= yii\helpers\Url::to(['createann']);?>?"+"<?= $_SERVER['QUERY_STRING'];?>",
+                success : function(layero, index){
+					// layer.close(index);
+     //            	//layer.msg('添加成功');
+     //            	table.reload('ancontent', {
+     //            		page: {
+					// 	curr: 1 //重新从第 1 页开始
+					// 	}
+					// });
+                },
+                end: function () {
+                	table.reload('ancontent', {
+                		page: {
+						//curr: 1 //重新从第 1 页开始
+						}
+					});
+                }                
+            });	
+		      	//layer.msg('添加');
+		    break;
+		    case 'processed':
+		      	//layer.msg('批量处理');
+		      	var data = checkStatus.data;
+		      	// console.log(data);
+		      	var url = "<?= yii\helpers\Url::to(['processed']); ?>";
+		      	//console.log(data);
+		      	if(data.length!==0){
+		      	// 	layer.confirm('确定处理选中的信息？',{icon:3, title:'提示信息'},function(index){
+		      	// 		var index = layer.msg('处理中，请稍候',{icon: 16,time:false,shade:0.8});
+		      	// 		setTimeout(function(){
+		      	// 			$.post(url,{"keys":data,"remark":},function(data){
+		      	// 				if(data.code===200){
+		      	// 					console.log(data);
+		      	// 					layer.msg(data.msg);
+		      	// 					layer.close(index);
+		      	// 					setTimeout(function(){
+		      	// 						table.reload('ancontent', {
+		      	// 							page: {
+									// 		curr: 1 //重新从第 1 页开始
+									// 	}
+									// });
+		      	// 					},500);
+		      	// 				}else{
+		      	// 					layer.close(index);
+		      	// 					layer.msg(data.msg);
+		      	// 				}
+		      	// 			},"json").fail(function(a,b,c){
+		      	// 				if(a.status==403){
+		      	// 					layer.msg('没有权限',{icon: 5});
+		      	// 				}else{
+		      	// 					layer.msg('系统错误',{icon: 5});
+		      	// 				}
+		      	// 			});
+		      	// 		},800);
+		      	// 	});
+		      	    var index = layui.layer.open({
+			            title : "公告处理备注",
+			            type : 1,
+			            area: ['50%', '60%'],
+			            content : $(".remark-form").removeClass("layui-hide"),
+			            success : function(fromData, callback){
+			            	form.on('submit(remark-go)', function(fromData,callback){
+			            		console.log(fromData);
+			            		var remark = '';
+			            		if(fromData.field.remark==5){
+			            			remark = fromData.field.desc;
+			            		}else{
+			            			remark = fromData.field.remark;
+			            		}
+			            		if(remark){
+									$.post(url,{"keys":data,"remark":remark},function(data,callback){
+							                if(data.code===200){
+							                	layer.close(index);
+							                    layer.msg(data.msg);
+							                    setTimeout(function(){
+				      							table.reload('ancontent', {
+				      								page: {
+													//curr: 1 //重新从第 1 页开始
+												}
+											});
+				      						},500);
+							                }else{
+							                    layer.close(index);
+							                    layer.msg(data.msg);
+							                }
+							            },"json").fail(function(a,b,c){
+							                if(a.status==403){
+							                    layer.msg('没有权限');
+							                }else{
+							                    layer.msg('系统错误');
+							                }
+							            });
+						  		}else{
+						  			layer.msg("请填写处理备注",{icon: 5});
+						  		}
+							  // console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+							  // console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+							  // console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+							  return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+							});
+			            },
+			            end: function () {
+			                $(".remark-form").addClass("layui-hide");
+			            }
+			        });	
+			        //layui.layer.full(index); //全屏当前弹出层
+			        return false;
+				// form.on('select(get-remark)', function(data){
+				//   console.log(data);
+				// });
+		      	}else{
+		      		layer.msg("请选择需要处理的公告",{icon: 5});
+		      	}
+		    break;
+		    case 'delete-ann':
+		      	//layer.msg('删除');
+		      	var data = checkStatus.data;
+		      	console.log(data);
+		      	var url = "<?= yii\helpers\Url::to(['deleteann']); ?>";
+		      	if(data.length!==0){
+		      		layer.confirm('确定删除选中的信息？',{icon:3, title:'提示信息'},function(index){
+		      			var index = layer.msg('删除中，请稍候',{icon: 16,time:false,shade:0.8});
+		      			setTimeout(function(){
+		      				$.post(url,{"keys":data},function(data){
+		      					if(data.code===200){
+		      						console.log(data);
+		      						layer.msg(data.msg);
+		      						layer.close(index);
+		      						setTimeout(function(){
+		      							table.reload('ancontent', {
+		      								page: {
+											//curr: 1 //重新从第 1 页开始
+										}
+									});
+		      						},500);
+		      					}else{
+		      						layer.close(index);
+		      						layer.msg(data.msg);
+		      					}
+		      				},"json").fail(function(a,b,c){
+		      					if(a.status==403){
+		      						layer.msg('没有权限',{icon: 5});
+		      					}else{
+		      						layer.msg('系统错误',{icon: 5});
+		      					}
+		      				});
+		      			},800);
+		      		});
+		      	}else{
+		      		layer.msg("请选择需要删除的公告",{icon: 5});
+		      	}
+		    break;
+		    };
+		  });
+	//监听公告备注select
+	form.on('select(get-remark)', function(data){
+	  console.log(data);
+	  if(data.value==5){
+	  	$("#desc").removeAttr('style');
+	  }else{
+	  	$("#desc").css("display","none");
+	  }
+	});
 
     //省份开关操作
     form.on('switch(province-switch)', function(obj){
@@ -179,7 +246,6 @@ layui.config({
             });
         return false;       
     }); 
-  
 
 
     //添加主要内容
@@ -402,6 +468,53 @@ layui.config({
         return false;
 	});
 
+	//渲染富文本
+    var contents = layedit.build('remark-edit');
+
+	//编辑省份链接
+	$("body").on("click",".updata-remark",function(){  
+		//console.log(123);
+        var index = layui.layer.open({
+            title : "编辑笔记",
+            type : 1,
+            area: ['60%', '65%'],
+            content : $(".province-remark-form").removeClass("layui-hide"),
+            success : function(layero, index){
+            	form.on('submit(province-remark-go)', function(data,index){
+					var href="<?= yii\helpers\Url::to(['province/editremark'])?>";
+					data.field.remark = layedit.getContent(contents);
+					$.post(href,data.field,function(data,index){
+			                if(data.code===200){
+			                    layer.msg(data.msg);
+			                    setTimeout(function(){
+			                    	layer.close(index);
+			                       	location.reload();
+			                    },500);
+			                }else{
+			                    layer.close(index);
+			                    layer.msg(data.msg);
+			                }
+			            },"json").fail(function(a,b,c){
+			                if(a.status==403){
+			                    layer.msg('没有权限');
+			                }else{
+			                    layer.msg('系统错误');
+			                }
+			            });
+				  // console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+				  // console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+				  // console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+				  return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+				});
+            },
+            end: function () {
+                $(".province-remark-form").addClass("layui-hide");
+            }
+        });	
+        //layui.layer.full(index); //全屏当前弹出层
+        return false;
+	});
+
 	//基础资料tip展示
 	$("body").on("mouseenter",".icon-about-title",function(e){
 		var that = this;
@@ -417,7 +530,7 @@ layui.config({
 	$("body").on("mouseenter",".icon-about-ann",function(e){
 		var that = this;
 		//小tips
-		layer.tips('1.公告添加后，状态为未处理，此时公告不会在小程序上展示。</br>2.使用批量处理后的公告才会在小程序上展示。</br>3.删除公告后，你和小程序都不展示此公告。</br>4.日常公告处理要求。在出现新的未处理公告后，请点击公告链接进入对应内容页，再根据公告整理手册进行内容整理，整理完成后方可对公告进行批量处理，让小程序用户查看。',that, {
+		layer.tips('1.公告添加后，状态为未处理，此时公告不会在小程序上展示。</br>2.使用批量处理后的公告才会在小程序上展示。</br>3.删除公告后，你和小程序都不展示此公告。</br>4.日常公告处理要求。在出现新的未处理公告后，请点击公告链接进入对应内容页，再根据公告整理手册进行内容整理，整理完成后方可对公告进行批量处理，让小程序用户查看。</br>5.处理公告时，请选择备注或者填写备注。以便追溯。',that, {
 		  tips: [1, '#009688'],
 		  time: 0,
 		  area: ['400px',]

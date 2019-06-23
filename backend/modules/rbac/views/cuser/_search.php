@@ -49,8 +49,8 @@ AppAsset::register($this);
 
 	<div class="form-group">
         <?= Html::submitButton('查找', ['class' => 'layui-btn layui-btn-normal']) ?>
-        <?= Html::button('添加', ['class' => 'layui-btn layui-default-add']) ?>
-		<?= Html::button('批量删除', ['class' => 'layui-btn layui-btn-danger gridview layui-default-delete-all']) ?>
+        <!-- <?= Html::button('添加', ['class' => 'layui-btn layui-default-add']) ?> -->
+		<!-- <?= Html::button('批量删除', ['class' => 'layui-btn layui-btn-danger gridview layui-default-delete-all']) ?> -->
     </div>
 
     <?php ActiveForm::end(); ?>

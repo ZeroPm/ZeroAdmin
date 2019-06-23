@@ -116,7 +116,7 @@ $this->registerJs($this->render('js/index.js'));
 				'headerOptions' => [
 					'width' => '10%'
 				],
-				'template' =>'{view} {update} {delete}',
+				'template' =>'{view}',
 				'buttons' => [
                     'view' => function ($url, $model, $key){
 						return Html::a('查看', Url::to(['view','id'=>$model->id]), ['class' => "layui-btn layui-btn-xs layui-default-view",'name' => $model->name]);

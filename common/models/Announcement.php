@@ -67,7 +67,7 @@ class Announcement extends \yii\db\ActiveRecord
             [['province_id','title', 'link', 'date'], 'required'],
             [['link'], 'string'],
             [['date'], 'safe'],
-            [['title'], 'string', 'max' => 255],
+            [['title', 'remark'], 'string', 'max' => 255],
             ['status', 'default', 'value' => self::STATUS_UNPROCESSED],
             //indentity字段暂时未使用到，公告的通知等待后续微信规则，和用户的反馈。
             ['identity', 'default', 'value' => self::STATUS_UNPROCESSED],

@@ -162,7 +162,7 @@ class Wechat extends Model
         $data['template_id'] = "2T2quvQgVeYCUhlTffv6mn0t1gCrdzxRcf0M2c0AUUM";
         $data['miniprogram'] = array(
             'appid' => 'wx8421f195ef6f0716',
-            //'pagepath' => 'pages/userCenter/userCenter',
+            'pagepath' => 'pages/userCenter/userCenter',
         );
         return $data;
     }

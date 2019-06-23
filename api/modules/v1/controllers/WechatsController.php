@@ -127,26 +127,33 @@ class WechatsController extends ActiveController
     public function actionMenu()
     {
 
-        // $data = array('button'=>array(
-        //     array(
-        //         'name'=>'订阅绑定',
-        //         'type'=>'click',
-        //         'key'=> 'SUB_FOLLOW',
-        //     ),
-        //     array(
-        //         'name'=>'联系小白',
-        //         'type'=>'click',
-        //         'key'=> 'CONTACT_XIAOBAI',
-        //     ),
-        // ));
+        $data = array('button'=>array(
+            array(
+                'name'=>'进入小程序',
+                'type'=>'miniprogram',
+                'appid'=>'wx8421f195ef6f0716',
+                'url'=>'http://mp.weixin.qq.com',
+                'pagepath'=>'pages/index/index',
+            ),
+            array(
+                'name'=>'订阅绑定',
+                'type'=>'click',
+                'key'=> 'SUB_FOLLOW',
+            ),
+            array(
+                'name'=>'联系小白',
+                'type'=>'click',
+                'key'=> 'CONTACT_XIAOBAI',
+            ),
+        ));
 
-        // //$data = json_encode($data);
+        //$data = json_encode($data);
 
-        // $a = Yii::$app->wechat->WeChatMenu()->create($data);
+        $a = Yii::$app->wechat->WeChatMenu()->create($data);
 
-        // return $a;
-        //$data = Yii::$app->wechat->WeChatMedia()->batchGetMaterial();
-        //return $data;
+        return $a;
+        $data = Yii::$app->wechat->WeChatMedia()->batchGetMaterial();
+        return $data;
     }
 
     public function actionUserinfo()

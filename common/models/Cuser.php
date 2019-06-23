@@ -6,6 +6,7 @@ use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\web\NotFoundHttpException;
 use common\models\Operation;
+use common\models\Wuser;
 
 /**
  * This is the model class for table "c_user".
@@ -51,7 +52,11 @@ class Cuser extends \yii\db\ActiveRecord
         return $this->hasOne(Operation::className(), ['uuid'=>'id']);
     }
 
-
+    //获取微信信息
+    public function getWuser()
+    {
+        return $this->hasOne(Wuser::className(), ['unionid'=>'union_id']);
+    }
 
     /**
      * {@inheritdoc}

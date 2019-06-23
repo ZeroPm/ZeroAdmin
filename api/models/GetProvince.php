@@ -8,6 +8,7 @@ use common\models\Operation;
 use common\models\Cuser;
 use common\models\Announcement;
 use common\models\Isread;
+use common\models\Brand;
 use yii\web\NotFoundHttpException;
 use yii\db\Command;
 use yii\data\Pagination;
@@ -146,6 +147,11 @@ class GetProvince extends Model
         }else{
             return false;
         }
+    }
+    // 获取轮播图
+    public function getBrand()
+    {
+        return Brand::find()->select('title,img_src,sort,link,status')->where('status=1')->limit(8)->orderBy('sort DESC')->all();
     }
 
 }

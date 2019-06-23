@@ -72,8 +72,8 @@ return [
                     'extraPatterns' => [
                         'GET receive' => 'receive',
                         'POST receive' => 'receive',
-                        'POST qrcode' => 'qrcode',
-                        'GET menu' => 'menu',
+                        // 'POST qrcode' => 'qrcode',
+                        // 'GET menu' => 'menu',
                         //'GET userinfo' => 'userinfo',
                     ]
                 ],

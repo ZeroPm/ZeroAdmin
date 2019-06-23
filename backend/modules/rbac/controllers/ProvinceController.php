@@ -12,6 +12,7 @@ use yii\helpers\Json;
 use yii\data\Pagination;
 use common\models\Announcement;
 use common\models\Cuser;
+use common\models\Content;
 
 
 /**
@@ -194,6 +195,27 @@ class ProvinceController extends Controller
         }       
     }
 
+    //编辑笔记
+    public function actionEditremark()
+    {
+        $data = Yii::$app->request->post();
+        if($data){
+            $model = $this->findModel($data['id']);
+            //echo $id;exit();
+            
+            $model->remark = $data['remark'];
+            
+            if($model->save()){
+                return json_encode(['code'=>200,"msg"=>"编辑成功"]);
+            }else{
+                $errors = $model->firstErrors;
+                return json_encode(['code'=>400,"msg"=>reset($errors)]);
+            }
+        }else{
+            return json_encode(['code'=>400,"msg"=>"数据获取失败"]);
+        }       
+    }
+
     //开启操作
     public function actionActive($id)
     {
@@ -332,7 +354,7 @@ class ProvinceController extends Controller
 
         if($data){    
             $model = new Announcement();
-            $count = $model->updateAll(['status'=>1],$condition);
+            $count = $model->updateAll(['status'=>1,'remark'=>$data['remark']],$condition);
             //return json_encode(['code'=>200,"msg"=>"成功",'data'=>$key]);exit();
             if($count>0){
                 return json_encode(['code'=>200,"msg"=>"处理成功"]);
@@ -348,6 +370,75 @@ class ProvinceController extends Controller
             return json_encode(['code'=>400,"msg"=>"请选择数据"]);
         }
     }
+
+    // public  function actionScript()
+    // {
+    //     $province_id = 650000;
+    //     $provinceData = Province::find()->where(["province_id"=>$province_id])->one();
+    //     $data = array(
+    //         0=>array(
+    //             'title'=>'自考办链接地址',
+    //             'sort'=>'99999',
+    //             'province_id'=>$province_id,
+    //             'link'=>$provinceData->link,
+    //             'content'=>'',
+    //             'link_type'=>1,
+    //             'status'=>1,
+    //             'identity'=>3,
+    //         ),
+    //         1=>array(
+    //             'title'=>'2019年10报名计划',
+    //             'sort'=>'90000',
+    //             'province_id'=>$province_id,
+    //             'link'=>$provinceData->link,
+    //             'link_type'=>1,
+    //             'content'=>'资料整理中，请稍后',
+    //             'status'=>1,
+    //             'identity'=>1,
+    //         ),
+    //         2=>array(
+    //             'title'=>'2019年10笔试计划',
+    //             'sort'=>'80000',
+    //             'province_id'=>$province_id,
+    //             'link'=>$provinceData->link,
+    //             'link_type'=>1,
+    //             'content'=>'资料整理中，请稍后',
+    //             'status'=>1,
+    //             'identity'=>2,
+    //         ),
+    //         3=>array(
+    //             'title'=>'2019年10非笔试计划',
+    //             'sort'=>'70000',
+    //             'province_id'=>$province_id,
+    //             'link'=>$provinceData->link,
+    //             'link_type'=>1,
+    //             'content'=>'资料整理中，请稍后',
+    //             'status'=>1,
+    //             'identity'=>2,
+    //         ),
+    //     );
+        
+    //     foreach ($data as $key => $value) {
+    //         $model = new Content;
+    //         $model->title = $value['title'];
+    //         $model->province_id = $value['province_id'];
+    //         $model->link = $value['link'];
+    //         $model->sort = $value['sort'];
+    //         $model->link_type = $value['link_type'];
+    //         $model->content = $value['content'];
+    //         $model->status = $value['status'];
+    //         $model->identity = $value['identity'];
+    //         $model->created_at = time();
+    //         $model->updated_at = time();
+    //         if($model->save()){
+    //             print_r('写入成功');
+    //         }else{
+    //             print_r('写入失败');exit();
+    //         }
+    //         //print_r($model);
+    //     }
+        
+    // }
 
 
 

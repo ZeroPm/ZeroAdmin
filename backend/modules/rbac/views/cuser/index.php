@@ -31,18 +31,18 @@ $this->registerJs($this->render('js/index.js'));
 				'maxButtonCount'=>5,
         ],
 		'columns' => [
-			[
-				'class' => 'backend\widgets\CheckboxColumn',
-				'checkboxOptions' => ['lay-skin'=>'primary','lay-filter'=>'choose'],
-				'headerOptions' => ['width'=>'50','style'=> 'text-align: center;'],
-				'contentOptions' => ['style'=> 'text-align: center;']
-			],
+			// [
+			// 	'class' => 'backend\widgets\CheckboxColumn',
+			// 	'checkboxOptions' => ['lay-skin'=>'primary','lay-filter'=>'choose'],
+			// 	'headerOptions' => ['width'=>'50','style'=> 'text-align: center;'],
+			// 	'contentOptions' => ['style'=> 'text-align: center;']
+			// ],
 
             //'id',
 
             'mopenid',
             'union_id',
-            'wopenid',
+            // 'wopenid',
             [
 				'attribute' => 'avatarurl',
 				'contentOptions' => ['style'=> 'text-align: center;'],

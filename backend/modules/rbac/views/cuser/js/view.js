@@ -56,4 +56,25 @@ layui.config({
 		},800);
 	}
 	loadOperation();
+
+	var code = document.getElementById('code-str');
+	//公众号扫码关注tip展示
+	$("body").on("mouseenter",".scene-qr-code",function(e){
+		var that = this;
+		// console.log(.parent());
+		var code_str = code.getAttribute("data")?code.getAttribute("data"):'原始公众号二维码（小程序中嵌入的）';
+		//小tips
+		layer.tips('二维码扫码场景描述：'+code_str,that, {
+		  tips: [1, '#009688'],
+		  time: 0,
+		  area: ['400px',]
+		});
+	});
+
+	//公告tip隐藏
+	$("body").on("mouseleave",".scene-qr-code",function(){
+		layer.closeAll('tips');
+	});
+
+
 });

@@ -53,11 +53,20 @@
 .updata-link{
 	cursor:pointer
 }
-
+.updata-remark{
+	cursor:pointer
+}
 .icon-about{
 	color: #009688;
 }
 
 .manual{
 	font-size: 16px;
+}
+
+.province-remark{
+	padding:20px;
+	height: 200px;
+	overflow :auto;
+	margin-bottom: 10px;
 }

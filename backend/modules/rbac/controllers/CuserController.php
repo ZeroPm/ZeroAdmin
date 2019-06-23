@@ -52,9 +52,12 @@ class CuserController extends Controller
      * @return mixed
      */
     public function actionView($id)
-    {
+    {   
+        $model = Cuser::find()->where(['id'=>$id])->with('wuser')->one();
+        // print_r($model->wuser->openid);exit();
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            // 'model' => $this->findModel($id),
+            'model' => $model,
         ]);
     }
 
@@ -63,18 +66,18 @@ class CuserController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
-        $model = new Cuser();
+    // public function actionCreate()
+    // {
+    //     $model = new Cuser();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
+    //     if ($model->load(Yii::$app->request->post()) && $model->save()) {
+    //         return $this->redirect(['view', 'id' => $model->id]);
+    //     } else {
+    //         return $this->render('create', [
+    //             'model' => $model,
+    //         ]);
+    //     }
+    // }
 
     //获取用户操作信息
     public function actionOperation($id)

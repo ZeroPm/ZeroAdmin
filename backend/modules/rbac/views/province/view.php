@@ -19,8 +19,7 @@
       var m = (date.getMinutes() <10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
       var s = (date.getSeconds() <10 ? '0' + date.getSeconds() : date.getSeconds());
       return Y+M+D+h+m+s;
-
-        }
+  }
 
   function linkType(num){
     //console.log(num);
@@ -103,9 +102,9 @@ $this->registerCss($this->render('css/view.css'));
 <!-- 公告table title渲染链接模板设置 -->
 <script type="text/html" id="titleTpl">
   {{#  if(d.status === 0){ }}
-  <a href={{d.link}} style="color:#FFB800;" target="_blank">{{ d.title }}</a>
+  <a href={{d.link}} style="color:#FFB800;" target="_blank" title="{{ d.title }}">{{ d.title }}</a>
   {{#  } else { }}
-  <a href={{d.link}} style="color:#666;" target="_blank">{{ d.title }}</a>
+  <a href={{d.link}} style="color:#666;" target="_blank" title="{{ d.title }}">{{ d.title }}</a>
   {{#  } }}
 </script>
 <!-- 公告待处理数量及收录时间 -->
@@ -130,8 +129,8 @@ $this->registerCss($this->render('css/view.css'));
         </div>
         <div class="layui-col-md3">
             <div class="grid-basis">
-                <div class="layui-elip layui-col-md9"><a target="view_window" href="<?= $model->link ?>"><?= $model->link ?></a></div>
-                <div class="layui-col-md3 "><i class="layui-icon layui-icon-edit updata-link" style="font-size: 25px;"></i></div>
+                <div class="layui-elip layui-col-md9"><a target="view_window" href="<?= $model->link ?>" title="<?= $model->link ?>"><?= $model->link ?></a></div>
+                <div class="layui-col-md3 "><i class="layui-icon layui-icon-edit updata-link" title="编辑链接" style="font-size: 25px;"></i></div>
             </div>
         </div>
         <div class="layui-col-md2">
@@ -149,7 +148,22 @@ $this->registerCss($this->render('css/view.css'));
           </div>
         </div>
     </div>
-
+    <div class="layui-row layui-fluid">
+      <div class="layui-col-md12">
+          <fieldset>
+            <legend>
+              <span style="font-size: 16px;">省份资料笔记</span>
+              <i class="layui-icon layui-icon-edit updata-remark" title="编辑笔记" style="font-size: 25px;"></i>
+            </legend>
+          </fieldset>
+      </div>
+    </div>
+    <div  class="province-remark"><?= $model->remark ?></div>
+<!--     <div class="layui-row layui-fluid" style=" ">
+      <div class="layui-col-md12">
+          
+      </div>
+    </div> -->
     <blockquote class="layui-elem-quote layui-quote-nm">
     公告
     <!-- 待处理及收录时间的容器 -->
@@ -308,7 +322,7 @@ $this->registerCss($this->render('css/view.css'));
         <a  class="layui-btn  layui-btn-lg layui-btn-normal">内容预览</a>
     </div>             
 </div>
-
+<!-- 编辑省份链接 -->
   <div id="link-form" class="layui-hide" style="padding:20px;">
     <form class="layui-form" lay-filter="link-form">
       <div class="layui-form-item">
@@ -327,4 +341,50 @@ $this->registerCss($this->render('css/view.css'));
       </div>
     </form>
   </div>
+<!-- 编辑省份笔记 -->
+  <div class="layui-form layui-hide province-remark-form" lay-filter="province-remark-form" style="padding:20px;">
+      <div class="layui-form-item">
+        <label class="layui-form-label">笔记</label>
+        <div class="layui-input-block">
+          <textarea name="remark" id="remark-edit" placeholder="请输入内容"  class="layui-textarea"><?= $model->remark; ?></textarea>
+        </div>
+        <input type="text" name="id" class="layui-input layui-hide" value="<?= $model->id;?>">
+      </div>
+      <div class="layui-form-item">
+        <div class="layui-input-block">
+            <div align='right'>
+            <button class="layui-btn" lay-submit lay-filter="province-remark-go">编辑</button>
+            </div>
+        </div>
+      </div>
+  </div>
+<!-- 处理公告备注 -->
+  <div style="padding:20px;" class="layui-form remark-form layui-hide" lay-filter="remark-form">
+      <div class="layui-form-item">
+        <label class="layui-form-label"><font color="red">*</font>选择备注</label>
+        <div class="layui-input-block">
+          <select name="remark" lay-filter="get-remark" lay-verify="required">
+            <option value="">请选择或填写公告处理备注</option>
+            <option value="无内容需要处理">无内容需要处理</option>
+            <option value="无内容整理，但需要通知给用户，已建立通知项">无内容整理，但需要通知给用户，已建立通知项</option>
+            <option value="已整理对应内容毕业计划，同时建立对应通知项">已整理对应内容计划，同时建立对应通知项</option>
+            <option value="5">其他</option>
+          </select>
+        </div>
+      </div>
+      <div class="layui-form-item" style="display: none;" id="desc">
+        <label class="layui-form-label">填写备注</label>
+        <div class="layui-input-block">
+          <textarea name="desc" placeholder="请输入内容"  class="layui-textarea"></textarea>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <div class="layui-input-block">
+            <div align='right'>
+              <button class="layui-btn" lay-submit lay-filter="remark-go">确认处理并提交</button>
+            </div>
+        </div>
+      </div>
+  </div>
+
 

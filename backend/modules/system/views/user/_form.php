@@ -4,6 +4,8 @@ use yii\widgets\ActiveForm;
 use common\models\UserRank;
 
 $this->registerJs($this->render('js/upload.js'));
+
+// print_r(UserRank::dropDown());
 ?>
 
 <div class="user-form create_box">
