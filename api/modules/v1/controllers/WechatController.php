@@ -87,7 +87,7 @@ class WechatController extends ActiveController
 			//$data['identity'] = [1,2,3];
 			$model = new GetProvince();
 			$model->setAttributes($data);
-			return ['code'=>200,"msg"=>'成功',"data"=>$model->getContent()];
+			return ['code'=>200,"msg"=>'成功',"data"=>$model->getContent(),'brand'=>$model->getBrand()];
 		}else{
 			return ['code'=>400,"msg"=>"未接收到参数"];
 		}
