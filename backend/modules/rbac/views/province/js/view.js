@@ -87,42 +87,14 @@ layui.config({
 		      	var url = "<?= yii\helpers\Url::to(['processed']); ?>";
 		      	//console.log(data);
 		      	if(data.length!==0){
-		      	// 	layer.confirm('确定处理选中的信息？',{icon:3, title:'提示信息'},function(index){
-		      	// 		var index = layer.msg('处理中，请稍候',{icon: 16,time:false,shade:0.8});
-		      	// 		setTimeout(function(){
-		      	// 			$.post(url,{"keys":data,"remark":},function(data){
-		      	// 				if(data.code===200){
-		      	// 					console.log(data);
-		      	// 					layer.msg(data.msg);
-		      	// 					layer.close(index);
-		      	// 					setTimeout(function(){
-		      	// 						table.reload('ancontent', {
-		      	// 							page: {
-									// 		curr: 1 //重新从第 1 页开始
-									// 	}
-									// });
-		      	// 					},500);
-		      	// 				}else{
-		      	// 					layer.close(index);
-		      	// 					layer.msg(data.msg);
-		      	// 				}
-		      	// 			},"json").fail(function(a,b,c){
-		      	// 				if(a.status==403){
-		      	// 					layer.msg('没有权限',{icon: 5});
-		      	// 				}else{
-		      	// 					layer.msg('系统错误',{icon: 5});
-		      	// 				}
-		      	// 			});
-		      	// 		},800);
-		      	// 	});
 		      	    var index = layui.layer.open({
 			            title : "公告处理备注",
 			            type : 1,
 			            area: ['50%', '60%'],
 			            content : $(".remark-form").removeClass("layui-hide"),
-			            success : function(fromData, callback){
+			            success : function(fromData, index){
+			            	// console.log(processed);
 			            	form.on('submit(remark-go)', function(fromData,callback){
-			            		console.log(fromData);
 			            		var remark = '';
 			            		if(fromData.field.remark==5){
 			            			remark = fromData.field.desc;
@@ -130,8 +102,9 @@ layui.config({
 			            			remark = fromData.field.remark;
 			            		}
 			            		if(remark){
-									$.post(url,{"keys":data,"remark":remark},function(data,callback){
+									$.post(url,{"keys":data,"remark":remark},function(data){
 							                if(data.code===200){
+							                	// console.log(processed);
 							                	layer.close(index);
 							                    layer.msg(data.msg);
 							                    setTimeout(function(){
@@ -189,6 +162,7 @@ layui.config({
 		      						layer.msg(data.msg);
 		      						layer.close(index);
 		      						setTimeout(function(){
+
 		      							table.reload('ancontent', {
 		      								page: {
 											//curr: 1 //重新从第 1 页开始

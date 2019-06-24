@@ -151,6 +151,7 @@ class GetProvince extends Model
     // 获取轮播图
     public function getBrand()
     {
+        // limit最多8张
         return Brand::find()->select('title,img_src,sort,link,status')->where('status=1')->limit(8)->orderBy('sort DESC')->all();
     }
 

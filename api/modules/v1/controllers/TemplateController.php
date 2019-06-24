@@ -32,7 +32,9 @@ class TemplateController extends ActiveController
         $model = new wechat();
         $data = array();
         $inFromData = $model->inFormData();
-        $inFromData['user_total'] = 0;
+        $user_total = 0;
+        $user_detail= [];
+        if($inFromData){
         foreach ($inFromData as $key1 => $value) {
             if($value['user_count']>0){
                 $model->upInformStatus($value['id'],1,$value['user_count']);
@@ -41,12 +43,18 @@ class TemplateController extends ActiveController
 
                     $inFromData[$key1]['template_data']['touser'] = $userValue['wopenid'];
                     Yii::$app->wechat->WeChatTemplate()->send($inFromData[$key1]['template_data']);
+                    
                 }
                 $model->upInformStatus($value['id'],2,$value['user_count']);
-                $inFromData['user_total'] += $value['user_count'];
-                $inFromData['user_detail'][$value['content']['province_id'].$value['id']] = $value['user_count'];
+                $user_total += $value['user_count'];
+                $user_detail[$value['content']['province_id'].$value['id']] = $value['user_count'];
+            }else{
+                $model->upInformStatus($value['id'],2,$value['user_count']);
+                $user_total += $value['user_count'];
+                $user_detail[$value['content']['province_id'].$value['id']] = $value['user_count'];   
             }
         }
-        return ['code'=>200,"msg"=>'成功',"通知用户数"=>$inFromData['user_total'],"通知用户明细"=>$inFromData['user_detail']];
+        }
+        return ['code'=>200,"msg"=>'成功',"通知用户数"=>$user_total,"通知用户明细"=>$user_detail];
     }
 }

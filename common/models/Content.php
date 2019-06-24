@@ -54,7 +54,7 @@ class Content extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['province_id', 'title', 'sort', 'link', 'identity'], 'required'],
+            [['province_id', 'title', 'sort', 'identity'], 'required'],
             [['province_id', 'sort', 'link_type', 'status', 'identity', 'created_at', 'updated_at'], 'integer'],
             [['content', 'link'], 'string'],
             [['title'], 'string', 'max' => 128],
