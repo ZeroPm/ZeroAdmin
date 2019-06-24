@@ -24,7 +24,7 @@ $this->registerJs($this->render('js/index.js'));
         <input type="text" name="id" readonly=true  class="layui-input layui-disabled layui-hide" value="<?= $model->id; ?>">
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label"><span class="icon-about"><i class="layui-icon layui-icon-tips"></i></span><font color="red">*</font>标题</label>
+        <label class="layui-form-label"><font color="red">*</font>标题</label>
         <div class="layui-input-block">
           <input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" lay-verType="tips" autocomplete="off" class="layui-input" value="<?= $model->title; ?>">
           <span style="color:#FFB800;">只填写标题，小程序将不展示改内容。只有标题+链接/内容时才会在小程序上展示!!!</span>
