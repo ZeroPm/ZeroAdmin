@@ -100,7 +100,7 @@ class Wechat extends Model
         //$cond = ['status'=>1];
         $fristDate = strtotime(date("Y-m-d")." 01:00:00");
         $overDate = strtotime(date("Y-m-d")." 23:59:00");
-        $infoData = Inform::find()->select('id,content_id,star_time,inform_doc,status')->where(['<','star_time',time()])->andwhere(['>','star_time',$fristDate])->andwhere(['<','star_time',$overDate])->andwhere(['status'=>1,'processed'=>0])->with(
+        $infoData = Inform::find()->select('id,content_id,star_time,inform_doc,status')->where(['<','star_time',time()])->andwhere(['>=','star_time',$fristDate])->andwhere(['<','star_time',$overDate])->andwhere(['status'=>1,'processed'=>0])->with(
             [   'content'=>function($query){
                 //$cond = ['status'=>1];
                 $query->select('id,province_id,status,identity');
