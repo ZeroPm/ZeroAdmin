@@ -106,11 +106,15 @@ class ContentController extends Controller
 
             $model->identity = $data['keys']['identity'];
 
+            if(empty($data['keys']['content'])&&empty($data['keys']['link'])){
+              $model->status = 0;
+            }
+
             //return json_encode(['code'=>200,"msg"=>"添加成功",'data'=>$data]);
 
             if ($model->save()) {
 
-                return json_encode(['code'=>200,"msg"=>"添加成功"]);
+                return json_encode(['code'=>200,"msg"=>"添加成功",'data'=>'link:'.$data['keys']['link'].'content:'.$data['keys']['content']]);
 
             }else{
 
@@ -166,11 +170,15 @@ class ContentController extends Controller
 
             $model->identity = $data['keys']['identity'];
 
+            if(empty($data['keys']['content'])&&empty($data['keys']['link'])){
+              $model->status = 0;
+            }
+
             //return json_encode(['code'=>200,"msg"=>"编辑成功",'data'=>$data['keys']['content']]);
 
             if ($model->save()) {
 
-                return json_encode(['code'=>200,"msg"=>"编辑成功"]);
+                return json_encode(['code'=>200,"msg"=>"编辑成功",'data'=>'link:'.$data['keys']['link'].'content:'.$data['keys']['content']]);
 
             }else{
 
@@ -257,11 +265,15 @@ class ContentController extends Controller
     {
         $model = $this->findModel($id);
         //echo $id;exit();
-        if($model->status== Province::STATUS_ACTIVE){
+        if($model->status== Content::STATUS_ACTIVE){
             return json_encode(['code'=>400,"msg"=>"该内容已经是开启状态"]);
         }
+
+        if(empty($model->content)&&empty($model->link)){
+            return json_encode(['code'=>403,"msg"=>"只有标题不可开启，请完善内容信息"]);
+        }
         
-        $model->status = Province::STATUS_ACTIVE;
+        $model->status = Content::STATUS_ACTIVE;
         
         if($model->save()){
             return json_encode(['code'=>200,"msg"=>"开启成功"]);

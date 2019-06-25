@@ -312,10 +312,10 @@ layui.config({
 
 	//内容开关操作
     form.on('switch(content-switch)', function(obj){
-    	console.log(this.value);
+    	// console.log(this.value);
         var href = this.checked?"<?= yii\helpers\Url::to(['content/active']);?>":"<?= yii\helpers\Url::to(['content/inactive']);?>";
             $.post(href+'?id='+this.value,function(data){
-                //console.log(data);
+                // console.log(data);
                 if(data.code===200){
                     layer.msg(data.msg);
                     setTimeout(function(){
@@ -323,6 +323,11 @@ layui.config({
                     },500);
                 }else{
                     layer.msg(data.msg);
+                    if(data.code===403){
+                    	obj.elem.checked = false;
+			            form.render("checkbox");
+                    	// console.log(obj);
+                    }
                 }
             },"json").fail(function(a,b,c){
                 if(a.status==403){
