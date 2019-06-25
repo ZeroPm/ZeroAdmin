@@ -52,13 +52,22 @@ $this->registerJs($this->render('js/index.js'));
 			],
             'sort',
             // 'link',
+    //         [
+    //         	'attribute' => 'link',
+				// 'contentOptions' => ['class'=>'text-center'],
+				// 'headerOptions' => ['style'=> 'text-align: center;'],
+				// 'format' => 'raw',
+				// 'value' => function($model){
+				// 	return Html::a($model->link,$model->link,['target'=>'view_window']);
+				// }	
+    //         ],
             [
-            	'attribute' => 'link',
+            	'attribute' => 'shorturl',
 				'contentOptions' => ['class'=>'text-center'],
 				'headerOptions' => ['style'=> 'text-align: center;'],
 				'format' => 'raw',
 				'value' => function($model){
-					return Html::a($model->link,$model->link,['target'=>'view_window']);
+					return Html::a($model->shorturl,$model->shorturl,['target'=>'view_window'])."</br>".Html::a($model->link,$model->link,['target'=>'view_window']);
 				}	
             ],
             [

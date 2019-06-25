@@ -121,28 +121,46 @@ layui.config({
 		});
         return false;
 	});
-    // 开关
-    form.on('switch(brand-switch)', function(data){
-        // var href = this.checked?'active':'inactive';
-        console.log(12312);
-        //     $.post(href+'?id='+this.name,function(data){
-        //         //console.log(data);
-        //         if(data.code===200){
-        //             layer.msg(data.msg);
-        //             setTimeout(function(){
-        //                //location.reload();
-        //             },500);
-        //         }else{
-        //             layer.msg(data.msg);
-        //         }
-        //     },"json").fail(function(a,b,c){
-        //         if(a.status==403){
-        //             layer.msg('没有权限',{icon: 5});
-        //         }else{
-        //             layer.msg('系统错误',{icon: 5});
-        //         }
-        //     });
-        // return false;       
+
+
+    $("body").on("click",".wechat-shorturl",function(){
+        // console.log(123);
+        var index = layui.layer.open({
+            title : "长链接转短连接",
+            type : 1,
+            area: ['60%', '65%'],
+            content : $(".shorturl-form").removeClass("layui-hide"),
+            success : function(layero, index){
+                form.on('submit(shorturl-go)', function(data,index){
+                    console.log(data.field.shorturl);
+                    var href="<?= yii\helpers\Url::to(['brand/shorturl'])?>";
+                    $.post(href,data.field,function(data,index){
+                        console.log(data);
+                            if(data.code===200){
+                                layer.msg(data.msg);
+                                $('.shorturl-span').html('<a href='+data.data+' target="view_window">'+data.data+'</a>');
+                            }else{
+                                layer.msg(data.msg);
+                            }
+                        },"json").fail(function(a,b,c){
+                            if(a.status==403){
+                                layer.msg('没有权限');
+                            }else{
+                                layer.msg('系统错误');
+                            }
+                        });
+                  // console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+                  // console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+                  // console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+                  return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                });
+            },
+            end: function () {
+                $(".shorturl-form").addClass("layui-hide");
+            }
+        }); 
+        //layui.layer.full(index); //全屏当前弹出层
+        return false;
     }); 
 
 });

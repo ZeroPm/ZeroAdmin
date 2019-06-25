@@ -48,7 +48,7 @@ class Brand extends \yii\db\ActiveRecord
             [['sort', 'status', 'created_at', 'updated_at'], 'integer'],
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
             [['title'], 'string', 'max' => 6],
-            [['img_src', 'link'], 'string', 'max' => 255],
+            [['img_src', 'link','shorturl'], 'string', 'max' => 255],
         ];
     }
 
@@ -63,6 +63,7 @@ class Brand extends \yii\db\ActiveRecord
             'img_src' => '图片',
             'sort' => '排序',
             'link' => '链接地址',
+            'shorturl' => '短链接',
             'status' => '状态',
             'created_at' => '创建时间',
             'updated_at' => '最近更新时间',
@@ -78,4 +79,10 @@ class Brand extends \yii\db\ActiveRecord
     //     $data_list = ArrayHelper::map($data, 'id', 'name');
     //     return $data_list;
     // } 
+
+    // 短链接转换
+    public static function shorturl($url)
+    {
+        return Yii::$app->wechat->WeChatQrcode()->shortUrl($url);
+    }
 }

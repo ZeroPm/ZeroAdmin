@@ -66,8 +66,16 @@ class BrandController extends Controller
     {
         $model = new Brand();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            // $data = Yii::$app->request->post();
+            // // print_r(Brand::shorturl($data['Brand']['link']));exit();
+            // $shorturl = Brand::shorturl($data['Brand']['link']);
+            // if($shorturl['errcode']==0){
+            //     $model->shorturl = $shorturl['short_url'];
+            // }
+            if($model->save()){
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -131,6 +139,19 @@ class BrandController extends Controller
         }else{
             return json_encode(['code'=>400,"msg"=>"请选择数据"]);
         }
+    }
+    public function actionShorturl()
+    {
+        $data = Yii::$app->request->post();
+        if($data){
+            $shorturl = Brand::shorturl($data['shorturl']);
+            return json_encode(['code'=>200,"msg"=>$shorturl['errcode'].$shorturl['errmsg'],'data'=>array_key_exists("short_url",$shorturl)?$shorturl['short_url']:'无']);
+            // return json_encode(['code'=>200,'msg'=>'转换成功','data'=>$data['shorturl']]); 
+        }else{
+            return json_encode(['code'=>400,"msg"=>"未接收到数据"]);    
+        }
+        
+        
     }
 
     /**

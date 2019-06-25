@@ -16,6 +16,7 @@ LayuiAsset::register($this);
             'img_src',
             'sort',
             'link',
+            'shorturl',
             'status',
             [
                 'attribute' => 'created_at',
