@@ -20,8 +20,10 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'sort')->textInput(['maxlength' => true])->textInput(['class'=>'layui-input','maxlength' => 5,'placeholder'=>'数值越大越前']) ?>
 
-    <?= $form->field($model, 'link')->textInput(['maxlength' => true])->textInput(['class'=>'layui-input','placeholder'=>'公众号文章地址']) ?>
-
+    <?= $form->field($model, 'link')->textInput(['maxlength' => true])->textInput(['class'=>'layui-input link-input','placeholder'=>'公众号文章地址']) ?>
+    <?= Html::button('一键转换短链接', ['class' => 'layui-btn wechat-shorturl-button']) ?>
+    <?= $form->field($model, 'shorturl')->textInput(['maxlength' => true])->textInput(['class'=>'layui-input shorturl-input','placeholder'=>'短连接']) ?>
+    
     <!-- <?= $form->field($model, 'status')->dropDownList([1=>'已开启','0'=>'已关闭']); ?> -->
 
     <?= $form->field($model, 'status')->radioList([1=>'已开启','0'=>'已关闭']); ?>
