@@ -447,10 +447,7 @@ layui.config({
         return false;
 	});
 
-	//渲染富文本
-    var contents = layedit.build('remark-edit');
-
-	//编辑省份链接
+	//编辑省份笔记
 	$("body").on("click",".updata-remark",function(){  
 		//console.log(123);
         var index = layui.layer.open({
@@ -490,6 +487,8 @@ layui.config({
                 $(".province-remark-form").addClass("layui-hide");
             }
         });	
+        //渲染富文本
+		layedit.build('remark-edit');
         //layui.layer.full(index); //全屏当前弹出层
         return false;
 	});
