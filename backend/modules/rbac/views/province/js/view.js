@@ -488,7 +488,7 @@ layui.config({
             }
         });	
         //渲染富文本
-		layedit.build('remark-edit');
+		var contents = layedit.build('remark-edit');
         //layui.layer.full(index); //全屏当前弹出层
         return false;
 	});
